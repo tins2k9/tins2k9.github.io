@@ -287,72 +287,20 @@
 
             .hero-card {
                 position: absolute;
-                width: 360px;
-                height: 120px;
-                left: -70px;
-                top: 150px;
-                border: 3px solid rgba(38,29,54,.9);
-                border-radius: 0;
-                background: linear-gradient(180deg,#f4edff 0 76%,#d7bcff 76% 100%);
-                box-shadow: 0 0 24px rgba(135,84,232,.28);
-                transform: none;
+                width: 440px;
+                height: auto;
+                left: -110px;
+                top: 100px;
                 z-index: 2;
+                filter: drop-shadow(0 22px 35px rgba(135,84,232,.35));
+                transform-origin: center center;
+                transition: transform 0.4s cubic-bezier(.2,.8,.2,1), filter 0.4s ease;
+                cursor: pointer;
             }
 
-            .hero-card:before {
-                content: '';
-                position: absolute;
-                right: -9px;
-                top: -3px;
-                width: 4px;
-                height: 126px;
-                background: rgba(38,29,54,.9);
-            }
-
-            .hero-card:after {
-                content: '';
-                position: absolute;
-                width: 100px;
-                height: 25px;
-                left: 218px;
-                top: -35px;
-                border: 3px solid rgba(38,29,54,.9);
-                border-bottom: 0;
-                border-radius: 0;
-                background: rgba(255,255,255,.92);
-            }
-
-            .hero-fans {
-                position: absolute;
-                left: 18px;
-                top: 13px;
-                display: flex;
-                gap: 33px;
-            }
-
-            .hero-fan {
-                width: 88px;
-                height: 88px;
-                border: 3px solid rgba(38,29,54,.9);
-                border-radius: 50%;
-                background: transparent;
-                box-shadow: none;
-                animation: fanSpin var(--fan-speed,8s) linear infinite;
-                transition: filter .35s;
-            }
-
-            .hero-card:hover .hero-fan {
-                filter: drop-shadow(0 0 8px rgba(135,84,232,.5));
-            }
-
-            .hero-card-line {
-                position: absolute;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                height: 3px;
-                background: linear-gradient(90deg,rgba(135,84,232,.18),#a879ff 22%,#d8b5ff 78%,rgba(135,84,232,.18));
-                box-shadow: 0 0 12px rgba(168,121,255,.55);
+            .hero-card:hover {
+                transform: scale(1.08) translateY(-8px) rotate(-3deg);
+                filter: drop-shadow(0 30px 45px rgba(135,84,232,.55));
             }
 
             .hero-orbit-line {
@@ -929,6 +877,30 @@
                 margin-top: 10px;
             }
 
+            .refresh-track {
+                width: 230px;
+                height: 5px;
+                margin-top: 9px;
+                border-radius: 999px;
+                background: rgba(135,84,232,.13);
+                overflow: hidden;
+            }
+
+            .refresh-bar {
+                height: 100%;
+                width: 0%;
+                border-radius: 999px;
+                background: linear-gradient(90deg,#a879ff,#8754e8);
+                box-shadow: 0 0 10px rgba(168,121,255,.55);
+                transition: width .25s linear;
+            }
+
+            .refresh-label {
+                margin-top: 6px;
+                color: var(--muted);
+                font: 500 .6rem 'DM Mono',monospace;
+            }
+
             @keyframes rise {
                 from {
                     opacity: 0;
@@ -1123,43 +1095,38 @@
                         </span>
                     </a>
                     <div class="nav-links">
-                        <a href="#compare">Compare</a>
-                        <a href="#how-it-works">How it works</a>
-                        <a href="#about">About</a>
+                        <a href="#compare" id="navCompare">Compare</a>
+                        <a href="#how-it-works" id="navHow">How it works</a>
+                        <a href="#about" id="navAbout">About</a>
                     </div>
                     <div class="nav-actions">
-                        <button class="lang-switch" type="button">EN / VI</button>
+                        <button class="lang-switch" type="button" id="langBtn">VI</button>
                         <button class="watchlist" type="button">Watchlist 0</button>
                     </div>
                 </nav>
                 <div class="hero-copy" id="top">
                     <div>
-                        <div class="eyebrow">GPU prices, without the tab chaos ✦</div>
+                        <div class="eyebrow" id="eyebrowText">GPU prices, without the tab chaos ✦</div>
                         <h1>
-                            Find the<br>
-                            <em>frame.</em>
+                            <span id="h1a">Find the</span><br>
+                            <em id="h1b">frame.</em>
                             <br>
                             <span style="color:var(--violet)">
-                                Pay the<br>fair price.
+                                <span id="h1c">Pay the</span><br><span id="h1d">fair price.</span>
                             </span>
                         </h1>
-                        <p class="intro">Compare graphics cards from AMD, Intel, and NVIDIA across shopee.</p>
+                        <p class="intro" id="introText">Compare graphics cards from AMD, Intel, and NVIDIA across shopee.</p>
                         <div class="hero-readout">
-                            <span>LIVE INDEX / 86 CARDS</span>
-                            <span>SHOPEE PRICES</span>
-                            <span>VNĐ DEALS</span>
+                            <span id="heroReadout1">LIVE INDEX / 86 CARDS</span>
+                            <span id="heroReadout2">SHOPEE PRICES</span>
+                            <span id="heroReadout3">VNĐ DEALS</span>
                         </div>
                         <div class="update-badge" id="updateBadge">Loading latest prices…</div>
+                        <div class="refresh-track" aria-hidden="true"><div class="refresh-bar" id="refreshBar"></div></div>
+                        <div class="refresh-label" id="refreshLabel"></div>
                     </div>
                     <div class="hero-orbit" aria-hidden="true">
-                        <div class="hero-card">
-                            <div class="hero-fans">
-                                <i class="hero-fan"></i>
-                                <i class="hero-fan"></i>
-                                <i class="hero-fan"></i>
-                            </div>
-                            <i class="hero-card-line"></i>
-                        </div>
+                        <img class="hero-card" src="5090.png" alt="Card RTX 5090 Hien Thi">
                         <i class="hero-orbit-line"></i>
                     </div>
                 </div>
@@ -1227,23 +1194,22 @@
                     </select>
                 </section>
                 <div class="range-row">
-                    <span>PRICE RANGE</span>
+                    <span id="priceRangeLabel">PRICE RANGE</span>
                     <input id="priceRange" type="range" min="0" max="100" step="1" value="100" aria-label="Maximum price">
                     <span class="range-values" id="rangeLabel">Up to 100.000.000₫</span>
                 </div>
             </div>
             <button class="compare-trigger" id="openCompare">
-                Compare GPU <span id="compareCount">0</span>
-                /5
+                <span id="compareTriggerLabel">Compare GPU</span> <span id="compareCount">0</span>/5
             </button>
             <div class="catalog-head" id="compare">
-                <h2>Best deals, sorted.</h2>
+                <h2 id="catalogHeading">Best deals, sorted.</h2>
                 <span id="resultCount"></span>
             </div>
             <section class="grid" id="grid"></section>
             <section class="about" id="about">
-                <h2>About</h2>
-                <p>
+                <h2 id="aboutHeading">About</h2>
+                <p id="aboutText">
                     Hi, this is made by Dreamy.<br>
                     Tiktok : https://www.tiktok.com/@dreamy.setupvn?_r=1&_t=ZS-98IsFR1lAzl<br>
                     Discord : https://discord.gg/FzV66vCNBG<br>
@@ -1257,18 +1223,18 @@
             <div class="panel">
                 <div class="panel-head">
                     <div>
-                        <div class="eyebrow">Side-by-side lab</div>
-                        <h2>Compare GPUs</h2>
+                        <div class="eyebrow" id="panelEyebrow">Side-by-side lab</div>
+                        <h2 id="panelHeading">Compare GPUs</h2>
                     </div>
                     <button class="close" id="closeCompare" aria-label="Close comparison">×</button>
                 </div>
-                <p class="hint">Select up to five cards from the index. Your picks stay here while you filter.</p>
+                <p class="hint" id="panelHint">Select up to five cards from the index. Your picks stay here while you filter.</p>
                 <div class="compare-list" id="compareList"></div>
                 <div class="table-wrap">
                     <table>
                         <thead>
                             <tr>
-                                <th>Metric</th>
+                                <th id="metricHeader">Metric</th>
                                 <th id="head0">—</th>
                                 <th id="head1">—</th>
                                 <th id="head2">—</th>
@@ -1370,16 +1336,141 @@
             }
             );
 
-            /* ---- live price overlay ------------------------------------
+            /* ---------------- i18n ---------------- */
+            const TXT = {
+                en: {
+                    navCompare: 'Compare', navHow: 'How it works', navAbout: 'About',
+                    langSwitchTarget: 'VI',
+                    eyebrow: 'GPU prices, without the tab chaos ✦',
+                    h1a: 'Find the', h1b: 'frame.', h1c: 'Pay the', h1d: 'fair price.',
+                    intro: 'Compare graphics cards from AMD, Intel, and NVIDIA across shopee.',
+                    readout1: n => `LIVE INDEX / ${n} CARDS`, readout2: 'SHOPEE PRICES', readout3: 'VNĐ DEALS',
+                    catalogHeading: 'Best deals, sorted.',
+                    compareTriggerLabel: 'Compare GPU',
+                    aboutHeading: 'About',
+                    aboutText: 'Hi, this is made by Dreamy.<br>Tiktok : https://www.tiktok.com/@dreamy.setupvn?_r=1&_t=ZS-98IsFR1lAzl<br>Discord : https://discord.gg/FzV66vCNBG<br><br>DreamyFrame X turns your gpu shopping chaos into a calm, useful shortlist, so finding your next gpu feels a little more magical.<br><br>Info might not be 100% accurate, but I\'d say it\'s right about 80% of the time :3',
+                    searchPlaceholder: 'Search name, series, VRAM, PSU...',
+                    vendorAll: 'All brands',
+                    sortOptions: [{v:'strength',t:'Strongest first'},{v:'weakness',t:'Weakest first'},{v:'coolest',t:'Coolest first'},{v:'hottest',t:'Hottest first'},{v:'psuHigh',t:'Highest PSU'},{v:'psuLow',t:'Lowest PSU'},{v:'cheap',t:'Cheapest first'},{v:'costly',t:'Costliest first'},{v:'value',t:'Best price / performance'},{v:'badValue',t:'Worst price / performance'}],
+                    vramOptions: [{v:'all',t:'Any VRAM'},{v:'8',t:'8 GB or less'},{v:'12',t:'12 GB or less'},{v:'16',t:'16 GB or less'},{v:'20',t:'20 GB or more'}],
+                    priceRangeLabel: 'PRICE RANGE', upTo: 'Up to',
+                    panelEyebrow: 'Side-by-side lab', panelHeading: 'Compare GPUs',
+                    panelHint: 'Select up to five cards from the index. Your picks stay here while you filter.',
+                    metricHeader: 'Metric',
+                    resultCount: (n,total) => `${n} cards / ${total} indexed`,
+                    gbVram: 'GB VRAM', psu: 'PSU', wPlus: 'W+',
+                    statLoad: 'MAX LOAD', statFurmark: 'FURMARK', statFps: 'CP2077 LOW',
+                    addBtn: '+ Compare', addedBtn: '✓ Added', perFps: '/ FPS',
+                    emptyGrid: 'No cards match those filters. Try widening the price range.',
+                    emptyCompare: 'Add GPUs from the index to start comparing.',
+                    baselineFps: 'Baseline FPS',
+                    fpsAdvantage: d => `+${d}% FPS vs slowest`,
+                    removeBtn: 'Remove',
+                    rowLabels: ['Price','Original price','VRAM','Max load','FurMark','Cyberpunk 2077','Recommended PSU','FPS advantage','Value'],
+                    live: 'LIVE',
+                    loadingPrices: 'Loading latest prices…',
+                    livePricesFound: (m,n,when) => `Live Shopee prices for ${m}/${n} cards · updated ${when}`,
+                    noLiveMatches: when => `No live matches yet · showing reference prices · feed updated ${when}`,
+                    feedUnavailable: 'Showing reference prices (live feed unavailable)',
+                    refreshIn: s => `Next refresh in ${s}s`,
+                },
+                vi: {
+                    navCompare: 'So sánh', navHow: 'Cách hoạt động', navAbout: 'Giới thiệu',
+                    langSwitchTarget: 'EN',
+                    eyebrow: 'Giá GPU, khỏi cần mở chục tab ✦',
+                    h1a: 'Tìm đúng', h1b: 'card.', h1c: 'Trả đúng', h1d: 'giá.',
+                    intro: 'So sánh card đồ họa AMD, Intel và NVIDIA trên Shopee.',
+                    readout1: n => `CHỈ SỐ TRỰC TIẾP / ${n} CARD`, readout2: 'GIÁ SHOPEE', readout3: 'ƯU ĐÃI VNĐ',
+                    catalogHeading: 'Deal ngon, đã sắp xếp.',
+                    compareTriggerLabel: 'So sánh GPU',
+                    aboutHeading: 'Giới thiệu',
+                    aboutText: 'Chào, trang này do Dreamy làm.<br>Tiktok : https://www.tiktok.com/@dreamy.setupvn?_r=1&_t=ZS-98IsFR1lAzl<br>Discord : https://discord.gg/FzV66vCNBG<br><br>DreamyFrame X giúp việc chọn mua GPU bớt rối hơn, gom lại thành một danh sách gọn gàng, dễ nhìn.<br><br>Thông tin có thể không đúng sự thật nhưng theo tôi thì nó đúng khoảng 80% :3',
+                    searchPlaceholder: 'Tìm tên, dòng, VRAM, PSU...',
+                    vendorAll: 'Tất cả hãng',
+                    sortOptions: [{v:'strength',t:'Mạnh nhất trước'},{v:'weakness',t:'Yếu nhất trước'},{v:'coolest',t:'Mát nhất trước'},{v:'hottest',t:'Nóng nhất trước'},{v:'psuHigh',t:'PSU cao nhất'},{v:'psuLow',t:'PSU thấp nhất'},{v:'cheap',t:'Rẻ nhất trước'},{v:'costly',t:'Đắt nhất trước'},{v:'value',t:'Hiệu năng/giá tốt nhất'},{v:'badValue',t:'Hiệu năng/giá kém nhất'}],
+                    vramOptions: [{v:'all',t:'VRAM bất kỳ'},{v:'8',t:'8 GB trở xuống'},{v:'12',t:'12 GB trở xuống'},{v:'16',t:'16 GB trở xuống'},{v:'20',t:'20 GB trở lên'}],
+                    priceRangeLabel: 'KHOẢNG GIÁ', upTo: 'Tối đa',
+                    panelEyebrow: 'Phòng so sánh', panelHeading: 'So sánh GPU',
+                    panelHint: 'Chọn tối đa năm card từ danh sách. Lựa chọn của bạn vẫn giữ khi bạn lọc.',
+                    metricHeader: 'Thông số',
+                    resultCount: (n,total) => `${n} card / ${total} trong danh sách`,
+                    gbVram: 'GB VRAM', psu: 'PSU', wPlus: 'W+',
+                    statLoad: 'TẢI TỐI ĐA', statFurmark: 'FURMARK', statFps: 'CP2077 LOW',
+                    addBtn: '+ So sánh', addedBtn: '✓ Đã thêm', perFps: '/ FPS',
+                    emptyGrid: 'Không có card nào khớp bộ lọc. Thử nới rộng khoảng giá.',
+                    emptyCompare: 'Thêm GPU từ danh sách để bắt đầu so sánh.',
+                    baselineFps: 'FPS cơ sở',
+                    fpsAdvantage: d => `+${d}% FPS so với card yếu nhất`,
+                    removeBtn: 'Xóa',
+                    rowLabels: ['Giá','Giá gốc','VRAM','Tải tối đa','FurMark','Cyberpunk 2077','PSU đề nghị','Chênh lệch FPS','Giá trị'],
+                    live: 'TRỰC TIẾP',
+                    loadingPrices: 'Đang tải giá mới nhất…',
+                    livePricesFound: (m,n,when) => `Giá Shopee trực tiếp cho ${m}/${n} card · cập nhật ${when}`,
+                    noLiveMatches: when => `Chưa khớp giá trực tiếp · đang hiện giá tham khảo · feed cập nhật ${when}`,
+                    feedUnavailable: 'Đang hiện giá tham khảo (không lấy được feed)',
+                    refreshIn: s => `Làm mới sau ${s}s`,
+                }
+            };
+            let LANG = 'en';
+
+            function rebuildOptions(selectEl, options) {
+                if (!selectEl) return;
+                const current = selectEl.value;
+                selectEl.innerHTML = options.map(o => `<option value="${o.v}">${o.t}</option>`).join('');
+                if (options.some(o => o.v === current))
+                    selectEl.value = current;
+            }
+
+            function applyStaticText() {
+                const t = TXT[LANG];
+                document.querySelector('#navCompare').textContent = t.navCompare;
+                document.querySelector('#navHow').textContent = t.navHow;
+                document.querySelector('#navAbout').textContent = t.navAbout;
+                document.querySelector('#langBtn').textContent = t.langSwitchTarget;
+                document.querySelector('#eyebrowText').textContent = t.eyebrow;
+                document.querySelector('#h1a').textContent = t.h1a;
+                document.querySelector('#h1b').textContent = t.h1b;
+                document.querySelector('#h1c').textContent = t.h1c;
+                document.querySelector('#h1d').textContent = t.h1d;
+                document.querySelector('#introText').textContent = t.intro;
+                document.querySelector('#heroReadout1').textContent = t.readout1(gpus.length);
+                document.querySelector('#heroReadout2').textContent = t.readout2;
+                document.querySelector('#heroReadout3').textContent = t.readout3;
+                document.querySelector('#catalogHeading').textContent = t.catalogHeading;
+                document.querySelector('#compareTriggerLabel').textContent = t.compareTriggerLabel;
+                document.querySelector('#aboutHeading').textContent = t.aboutHeading;
+                document.querySelector('#aboutText').innerHTML = t.aboutText;
+                document.querySelector('#search').placeholder = t.searchPlaceholder;
+                const vendorAllOpt = document.querySelector('#vendor option[value="all"]');
+                if (vendorAllOpt)
+                    vendorAllOpt.textContent = t.vendorAll;
+                rebuildOptions(document.querySelector('#sort'), t.sortOptions);
+                rebuildOptions(document.querySelector('#vram'), t.vramOptions);
+                document.querySelector('#priceRangeLabel').textContent = t.priceRangeLabel;
+                document.querySelector('#panelEyebrow').textContent = t.panelEyebrow;
+                document.querySelector('#panelHeading').textContent = t.panelHeading;
+                document.querySelector('#panelHint').textContent = t.panelHint;
+                document.querySelector('#metricHeader').textContent = t.metricHeader;
+                updateSlider();
+            }
+
+            function setLanguage(lang) {
+                LANG = lang;
+                applyStaticText();
+                render();
+                updateCompare();
+                tickRefreshBar();
+            }
+
+            /* ---------------- live price overlay ----------------
                gpu-prices.json is written by scrape-shopee.js (run via cron
-               on the server). Shape: { "updatedAt": "...", "prices": {
-               "<gpu name>": { "price": 12345000, "discount": 12,
-               "url": "https://shopee.vn/..." } } }
-               If the file is missing or a model isn't in it yet, the
-               hand-tuned numbers above are used as a fallback so the site
-               never shows a blank/broken card. ------------------------- */
+               on the server, e.g. every few hours). This page re-fetches
+               that already-written file every 60s on its own — it does
+               NOT hit Shopee itself every minute, just re-reads your own
+               static JSON, so there's no extra scraping load. ---------- */
             async function applyLivePrices() {
                 const badge = document.querySelector('#updateBadge');
+                const t = TXT[LANG];
                 try {
                     const res = await fetch('gpu-prices.json', {
                         cache: 'no-store'
@@ -1403,16 +1494,32 @@
                     }
                     );
                     if (badge) {
-                        const when = feed.updatedAt ? new Date(feed.updatedAt).toLocaleString('vi-VN') : 'unknown';
-                        badge.textContent = matched ? `Live Shopee prices for ${matched}/${gpus.length} cards · updated ${when}` : `No live matches yet · showing reference prices · feed updated ${when}`;
+                        const when = feed.updatedAt ? new Date(feed.updatedAt).toLocaleString(LANG === 'vi' ? 'vi-VN' : 'en-US') : 'unknown';
+                        badge.textContent = matched ? t.livePricesFound(matched, gpus.length, when) : t.noLiveMatches(when);
                     }
                 } catch (err) {
                     if (badge)
-                        badge.textContent = 'Showing reference prices (live feed unavailable)';
+                        badge.textContent = t.feedUnavailable;
                 } finally {
                     render();
                     updateCompare();
+                    refreshDeadline = Date.now() + REFRESH_INTERVAL_MS;
                 }
+            }
+
+            const REFRESH_INTERVAL_MS = 60000;
+            let refreshDeadline = Date.now() + REFRESH_INTERVAL_MS;
+            function tickRefreshBar() {
+                const bar = document.querySelector('#refreshBar');
+                const label = document.querySelector('#refreshLabel');
+                const remainingMs = Math.max(0, refreshDeadline - Date.now());
+                const pct = 100 - (remainingMs / REFRESH_INTERVAL_MS) * 100;
+                if (bar)
+                    bar.style.width = Math.min(100, Math.max(0, pct)) + '%';
+                if (label)
+                    label.textContent = TXT[LANG].refreshIn(Math.ceil(remainingMs / 1000));
+                if (remainingMs <= 0)
+                    applyLivePrices();
             }
 
             let selected = [];
@@ -1434,6 +1541,7 @@
             ;
             const grid = document.querySelector('#grid');
             function render() {
+                const t = TXT[LANG];
                 const query = document.querySelector('#search').value.toLowerCase().trim()
                   , brand = document.querySelector('#vendor').value
                   , vram = Number(document.querySelector('#vram').value) || 0
@@ -1459,8 +1567,8 @@
                     return ['weakness', 'coolest', 'psuLow', 'cheap', 'badValue'].includes(mode) ? av - bv : bv - av
                 }
                 );
-                document.querySelector('#resultCount').textContent = `${list.length} cards / ${gpus.length} indexed`;
-                grid.innerHTML = list.length ? list.map( (g, i) => `<article class="gpu" style="animation-delay:${Math.min(i * 22, 300)}ms"><div class="gpu-top"><div><div class="vendor">${g.vendor}${g.live ? ' · LIVE' : ''}</div><h3>${g.name}</h3><div class="meta"><span>${g.vram} GB VRAM</span><span>PSU ${recommendedPsu(g.watt)}W+</span></div></div><div class="price-stack"><span class="discount-badge">-${g.discount}%</span><span class="original-price">${money(g.price)}</span><div class="price">${money(dealPrice(g))}</div></div></div><div class="stats"><div class="stat"><small>MAX LOAD</small><strong>${g.temp}°C</strong></div><div class="stat"><small>FURMARK</small><strong>${g.score.toLocaleString()}</strong></div><div class="stat"><small>CP2077 LOW</small><strong>${g.fps} FPS</strong></div></div><div class="gpu-footer"><span class="score">${money(dealPrice(g) / g.fps)} / FPS</span><button class="add" onclick="toggleSelect(${g.id})">${selected.includes(g.id) ? '✓ Added' : '+ Compare'}</button></div></article>`).join('') : '<div class="empty">No cards match those filters. Try widening the price range.</div>';
+                document.querySelector('#resultCount').textContent = t.resultCount(list.length, gpus.length);
+                grid.innerHTML = list.length ? list.map( (g, i) => `<article class="gpu" style="animation-delay:${Math.min(i * 22, 300)}ms"><div class="gpu-top"><div><div class="vendor">${g.vendor}${g.live ? ' · ' + t.live : ''}</div><h3>${g.name}</h3><div class="meta"><span>${g.vram} ${t.gbVram}</span><span>${t.psu} ${recommendedPsu(g.watt)}${t.wPlus}</span></div></div><div class="price-stack"><span class="discount-badge">-${g.discount}%</span><span class="original-price">${money(g.price)}</span><div class="price">${money(dealPrice(g))}</div></div></div><div class="stats"><div class="stat"><small>${t.statLoad}</small><strong>${g.temp}°C</strong></div><div class="stat"><small>${t.statFurmark}</small><strong>${g.score.toLocaleString()}</strong></div><div class="stat"><small>${t.statFps}</small><strong>${g.fps} FPS</strong></div></div><div class="gpu-footer"><span class="score">${money(dealPrice(g) / g.fps)} ${t.perFps}</span><button class="add" onclick="toggleSelect(${g.id})">${selected.includes(g.id) ? t.addedBtn : t.addBtn}</button></div></article>`).join('') : `<div class="empty">${t.emptyGrid}</div>`;
             }
             function toggleSelect(id) {
                 if (selected.includes(id))
@@ -1473,16 +1581,17 @@
                 render();
             }
             function updateCompare() {
+                const t = TXT[LANG];
                 document.querySelector('#compareCount').textContent = selected.length;
                 const picks = selected.map(id => gpus.find(g => g.id === id));
                 const slowest = picks.length ? Math.min(...picks.map(g => g.fps)) : 0;
                 document.querySelector('#compareList').innerHTML = picks.length ? picks.map(g => {
                     const delta = slowest ? Math.round((g.fps / slowest - 1) * 100) : 0;
-                    return `<div class="compare-chip"><div class="vendor">${g.vendor}</div><strong>${g.name}</strong><span class="compare-delta">${delta ? `+${delta}% FPS vs slowest` : 'Baseline FPS'}</span><button class="remove" onclick="toggleSelect(${g.id})">Remove</button></div>`
+                    return `<div class="compare-chip"><div class="vendor">${g.vendor}</div><strong>${g.name}</strong><span class="compare-delta">${delta ? t.fpsAdvantage(delta) : t.baselineFps}</span><button class="remove" onclick="toggleSelect(${g.id})">${t.removeBtn}</button></div>`
                 }
-                ).join('') : '<div class="empty">Add GPUs from the index to start comparing.</div>';
+                ).join('') : `<div class="empty">${t.emptyCompare}</div>`;
                 [0, 1, 2, 3, 4].forEach( (i) => document.querySelector('#head' + i).textContent = picks[i]?.name || '—');
-                const rows = [['Price', g => `${money(dealPrice(g))} (-${g.discount}%)`], ['Original price', g => money(g.price)], ['VRAM', g => g.vram + ' GB'], ['Max load', g => g.temp + '°C'], ['FurMark', g => g.score.toLocaleString()], ['Cyberpunk 2077', g => g.fps + ' FPS'], ['Recommended PSU', g => recommendedPsu(g.watt) + 'W+'], ['FPS advantage', g => slowest ? `+${Math.round((g.fps / slowest - 1) * 100)}% vs slowest` : '—'], ['Value', g => money(dealPrice(g) / g.fps) + ' / FPS']];
+                const rows = [[t.rowLabels[0], g => `${money(dealPrice(g))} (-${g.discount}%)`], [t.rowLabels[1], g => money(g.price)], [t.rowLabels[2], g => g.vram + ' GB'], [t.rowLabels[3], g => g.temp + '°C'], [t.rowLabels[4], g => g.score.toLocaleString()], [t.rowLabels[5], g => g.fps + ' FPS'], [t.rowLabels[6], g => recommendedPsu(g.watt) + 'W+'], [t.rowLabels[7], g => slowest ? t.fpsAdvantage(Math.round((g.fps / slowest - 1) * 100)) : '—'], [t.rowLabels[8], g => money(dealPrice(g) / g.fps) + ' ' + t.perFps]];
                 document.querySelector('#compareTable').innerHTML = rows.map( ([label,fn]) => `<tr><th>${label}</th>${[0, 1, 2, 3, 4].map(i => `<td>${picks[i] ? fn(picks[i]) : '—'}</td>`).join('')}</tr>`).join('');
             }
             const slider = document.querySelector('#priceRange');
@@ -1491,7 +1600,7 @@
                 const hue = position < 45 ? '#a86bff' : position < 65 ? '#8e55e8' : '#7442c5';
                 slider.style.setProperty('--range-progress', position + '%');
                 slider.style.setProperty('--range-color', hue);
-                document.querySelector('#rangeLabel').textContent = 'Up to ' + money(rangePrice(position));
+                document.querySelector('#rangeLabel').textContent = TXT[LANG].upTo + ' ' + money(rangePrice(position));
             }
             ;
             ['search', 'vendor', 'sort', 'vram'].forEach(id => document.querySelector('#' + id).addEventListener('input', render));
@@ -1516,23 +1625,8 @@
                     document.querySelector('#closeCompare').click()
             }
             );
-            const heroCard = document.querySelector('.hero-card');
-            let fanRamp;
-            const rampFans = (start, end, duration) => {
-                clearInterval(fanRamp);
-                const started = performance.now();
-                fanRamp = setInterval( () => {
-                    const progress = Math.min((performance.now() - started) / duration, 1);
-                    const speed = start + (end - start) * progress;
-                    heroCard.style.setProperty('--fan-speed', speed.toFixed(2) + 's');
-                    if (progress === 1)
-                        clearInterval(fanRamp)
-                }
-                , 40)
-            }
-            ;
-            heroCard.addEventListener('pointerenter', () => rampFans(8, .42, 1400));
-            heroCard.addEventListener('pointerleave', () => rampFans(.42, 8, 900));
+            document.querySelector('#langBtn').addEventListener('click', () => setLanguage(LANG === 'en' ? 'vi' : 'en'));
+
             const filterDock = document.querySelector('#filterDock');
             let lastScroll = window.scrollY;
             window.addEventListener('scroll', () => {
@@ -1546,10 +1640,26 @@
             , {
                 passive: true
             });
+            applyStaticText();
             updateSlider();
             render();
             updateCompare();
             applyLivePrices();
+            setInterval(tickRefreshBar, 250);
+
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('keydown', e => {
+                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
+                    e.preventDefault();
+                }
+            });
+            setInterval(() => {
+                const thoigianbientruoc = new Date().getTime();
+                debugger;
+                if (new Date().getTime() - thoigianbientruoc > 100) {
+                    window.location.href = "about:blank";
+                }
+            }, 50);
         </script>
     </body>
 </html>
