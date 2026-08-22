@@ -287,20 +287,72 @@
 
             .hero-card {
                 position: absolute;
-                width: 440px;
-                height: auto;
-                left: -110px;
-                top: 100px;
+                width: 360px;
+                height: 120px;
+                left: -70px;
+                top: 150px;
+                border: 3px solid rgba(38,29,54,.9);
+                border-radius: 0;
+                background: linear-gradient(180deg,#f4edff 0 76%,#d7bcff 76% 100%);
+                box-shadow: 0 0 24px rgba(135,84,232,.28);
+                transform: none;
                 z-index: 2;
-                filter: drop-shadow(0 22px 35px rgba(135,84,232,.35));
-                transform-origin: center center;
-                transition: transform 0.4s cubic-bezier(.2,.8,.2,1), filter 0.4s ease;
-                cursor: pointer;
             }
 
-            .hero-card:hover {
-                transform: scale(1.08) translateY(-8px) rotate(-3deg);
-                filter: drop-shadow(0 30px 45px rgba(135,84,232,.55));
+            .hero-card:before {
+                content: '';
+                position: absolute;
+                right: -9px;
+                top: -3px;
+                width: 4px;
+                height: 126px;
+                background: rgba(38,29,54,.9);
+            }
+
+            .hero-card:after {
+                content: '';
+                position: absolute;
+                width: 100px;
+                height: 25px;
+                left: 218px;
+                top: -35px;
+                border: 3px solid rgba(38,29,54,.9);
+                border-bottom: 0;
+                border-radius: 0;
+                background: rgba(255,255,255,.92);
+            }
+
+            .hero-fans {
+                position: absolute;
+                left: 18px;
+                top: 13px;
+                display: flex;
+                gap: 33px;
+            }
+
+            .hero-fan {
+                width: 88px;
+                height: 88px;
+                border: 3px solid rgba(38,29,54,.9);
+                border-radius: 50%;
+                background: transparent;
+                box-shadow: none;
+                animation: fanSpin var(--fan-speed,8s) linear infinite;
+                transition: filter .35s;
+            }
+
+            .hero-card:hover .hero-fan {
+                filter: drop-shadow(0 0 8px rgba(135,84,232,.5));
+            }
+
+            .hero-card-line {
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                height: 3px;
+                background: linear-gradient(90deg,rgba(135,84,232,.18),#a879ff 22%,#d8b5ff 78%,rgba(135,84,232,.18));
+                box-shadow: 0 0 12px rgba(168,121,255,.55);
             }
 
             .hero-orbit-line {
@@ -1100,7 +1152,14 @@
                         <div class="update-badge" id="updateBadge">Loading latest prices…</div>
                     </div>
                     <div class="hero-orbit" aria-hidden="true">
-                        <img class="hero-card" src="5090.png" alt="Card RTX 5090 Hien Thi">
+                        <div class="hero-card">
+                            <div class="hero-fans">
+                                <i class="hero-fan"></i>
+                                <i class="hero-fan"></i>
+                                <i class="hero-fan"></i>
+                            </div>
+                            <i class="hero-card-line"></i>
+                        </div>
                         <i class="hero-orbit-line"></i>
                     </div>
                 </div>
@@ -1311,6 +1370,14 @@
             }
             );
 
+            /* ---- live price overlay ------------------------------------
+               gpu-prices.json is written by scrape-shopee.js (run via cron
+               on the server). Shape: { "updatedAt": "...", "prices": {
+               "<gpu name>": { "price": 12345000, "discount": 12,
+               "url": "https://shopee.vn/..." } } }
+               If the file is missing or a model isn't in it yet, the
+               hand-tuned numbers above are used as a fallback so the site
+               never shows a blank/broken card. ------------------------- */
             async function applyLivePrices() {
                 const badge = document.querySelector('#updateBadge');
                 try {
@@ -1449,7 +1516,23 @@
                     document.querySelector('#closeCompare').click()
             }
             );
-            
+            const heroCard = document.querySelector('.hero-card');
+            let fanRamp;
+            const rampFans = (start, end, duration) => {
+                clearInterval(fanRamp);
+                const started = performance.now();
+                fanRamp = setInterval( () => {
+                    const progress = Math.min((performance.now() - started) / duration, 1);
+                    const speed = start + (end - start) * progress;
+                    heroCard.style.setProperty('--fan-speed', speed.toFixed(2) + 's');
+                    if (progress === 1)
+                        clearInterval(fanRamp)
+                }
+                , 40)
+            }
+            ;
+            heroCard.addEventListener('pointerenter', () => rampFans(8, .42, 1400));
+            heroCard.addEventListener('pointerleave', () => rampFans(.42, 8, 900));
             const filterDock = document.querySelector('#filterDock');
             let lastScroll = window.scrollY;
             window.addEventListener('scroll', () => {
@@ -1467,20 +1550,6 @@
             render();
             updateCompare();
             applyLivePrices();
-
-            document.addEventListener('contextmenu', e => e.preventDefault());
-            document.addEventListener('keydown', e => {
-                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
-                    e.preventDefault();
-                }
-            });
-            setInterval(() => {
-                const thoigianbientruoc = new Date().getTime();
-                debugger;
-                if (new Date().getTime() - thoigianbientruoc > 100) {
-                    window.location.href = "about:blank";
-                }
-            }, 50);
         </script>
     </body>
 </html>
