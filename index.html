@@ -1,0 +1,1555 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>DreamyFrame X | GPU price lab</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,700;6..96,900&family=Bungee&family=DM+Mono:wght@400;500&family=Fredoka:wght@500;600;700&family=Lobster&family=Outfit:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap'); :root {
+                --ink: #21172f;
+                --muted: #766b87;
+                --paper: #fbf9ff;
+                --line: #e2d9ed;
+                --violet: #8754e8;
+                --violet-deep: #4b237f;
+                --lavender: #e8d9ff;
+                --pink: #ffb6df;
+                --card: rgba(255,255,255,.82);
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            html, body {
+                min-width: 1200px;
+            }
+
+            body {
+                margin: 0;
+                color: var(--ink);
+                background: radial-gradient(circle at 14% 9%,rgba(231,215,255,.34) 0 5%,transparent 22%),radial-gradient(circle at 89% 16%,rgba(255,228,245,.3) 0 5%,transparent 20%),#fff;
+                font-family: 'Space Grotesk',sans-serif;
+                overflow-x: auto;
+            }
+
+            body:before, body:after {
+                content: '';
+                position: fixed;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background: #fff;
+                box-shadow: 0 0 18px 5px rgba(184,133,255,.72);
+                opacity: .8;
+                pointer-events: none;
+                animation: float 7s ease-in-out infinite;
+            }
+
+            body:before {
+                top: 22%;
+                left: 5%;
+            }
+
+            body:after {
+                right: 8%;
+                bottom: 18%;
+                width: 10px;
+                height: 10px;
+                animation-delay: -3s;
+            }
+
+            .particles {
+                position: fixed;
+                inset: 0;
+                overflow: hidden;
+                pointer-events: none;
+                z-index: -1;
+            }
+
+            .particle {
+                position: absolute;
+                width: var(--size);
+                height: var(--size);
+                left: var(--x);
+                top: var(--y);
+                border-radius: 50%;
+                background: #fff;
+                box-shadow: 0 0 14px 3px var(--glow);
+                opacity: 0;
+                animation: drift var(--duration) ease-in-out var(--delay) infinite;
+            }
+
+            .sakura-field {
+                position: fixed;
+                inset: 0;
+                overflow: hidden;
+                pointer-events: none;
+                z-index: -1;
+            }
+
+            .petal {
+                position: absolute;
+                left: var(--x);
+                top: -8%;
+                width: var(--size);
+                height: calc(var(--size) * 1.35);
+                border-radius: 100% 0 100% 0;
+                background: linear-gradient(135deg,#fff 15%,var(--petal) 88%);
+                box-shadow: 0 0 13px rgba(245,169,219,.55);
+                opacity: 0;
+                animation: petalFall var(--duration) linear var(--delay) infinite;
+            }
+
+            .petal:nth-child(3n) {
+                border-radius: 100% 0 100% 0;
+                transform: rotate(28deg);
+            }
+
+            .petal:nth-child(3n+1) {
+                border-radius: 0 100% 0 100%;
+                transform: rotate(-35deg);
+            }
+
+            .blossom {
+                position: absolute;
+                left: var(--x);
+                top: var(--y);
+                color: var(--blossom);
+                font-size: var(--size);
+                line-height: 1;
+                opacity: .65;
+                text-shadow: 0 0 15px rgba(255,174,224,.75);
+                animation: blossomBreathe var(--duration) ease-in-out var(--delay) infinite;
+            }
+
+            .shell {
+                width: min(1440px,100%);
+                min-width: 1120px;
+                margin: auto;
+                padding: 0 34px 70px;
+            }
+
+            header {
+                display: block;
+                margin-bottom: 42px;
+                animation: fadeUp .8s both;
+            }
+
+            .site-nav {
+                min-height: 72px;
+                display: grid;
+                grid-template-columns: 1fr auto 1fr;
+                align-items: center;
+                gap: 20px;
+                border-bottom: 1px solid #f0eaf7;
+            }
+
+            .nav-brand {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: var(--ink);
+                text-decoration: none;
+                font-weight: 700;
+                letter-spacing: -.04em;
+            }
+
+            .nav-links {
+                display: flex;
+                align-items: center;
+                gap: 30px;
+                justify-content: center;
+            }
+
+            .nav-links a {
+                color: var(--muted);
+                text-decoration: none;
+                font: 500 .7rem 'DM Mono',monospace;
+                transition: color .2s,transform .2s;
+            }
+
+            .nav-links a:hover {
+                color: var(--violet);
+                transform: translateY(-2px);
+            }
+
+            .nav-actions {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .lang-switch, .watchlist {
+                height: 32px;
+                padding: 0 11px;
+                border-radius: 999px;
+                background: #fff;
+                box-shadow: 0 5px 17px rgba(115,71,168,.08);
+                font-size: .65rem;
+            }
+
+            .watchlist {
+                color: var(--violet-deep);
+            }
+
+            .hero-copy {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 50px;
+                min-height: 530px;
+                padding: 70px 10%;
+            }
+
+            .brand {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                font-weight: 700;
+                letter-spacing: -.04em;
+                font-size: 1.3rem;
+            }
+
+            .mark {
+                width: 34px;
+                height: 34px;
+                display: grid;
+                place-items: center;
+                color: #fff;
+                background: linear-gradient(135deg,var(--violet),#be75ff);
+                border: 1px solid #fff;
+                border-radius: 12px;
+                box-shadow: 0 0 22px rgba(135,84,232,.75);
+                transform: rotate(-5deg);
+                animation: twinkle 3s ease-in-out infinite;
+            }
+
+            .eyebrow {
+                color: var(--violet);
+                font: 500 .72rem 'DM Mono',monospace;
+                text-transform: uppercase;
+                letter-spacing: .08em;
+            }
+
+            h1 {
+                max-width: 760px;
+                margin: 10px 0 20px;
+                color: #261d36;
+                font-family: 'Bodoni Moda','Ahsing','Lobster','Bungee','Resolve Sans Extrabold Extra','Resolve Sans','Fredoka','Outfit','Space Grotesk',serif;
+                font-size: clamp(4.2rem,6.4vw,7rem);
+                font-weight: 900;
+                line-height: .9;
+                letter-spacing: -.075em;
+                text-wrap: balance;
+            }
+
+            h1 em {
+                color: var(--violet);
+                font-style: normal;
+                font-weight: 900;
+            }
+
+            .intro {
+                max-width: 550px;
+                color: var(--muted);
+                font-size: 1rem;
+                line-height: 1.5;
+            }
+
+            .header-note {
+                max-width: 250px;
+                padding: 17px;
+                border: 1px solid var(--line);
+                border-radius: 18px;
+                background: rgba(255,255,255,.72);
+                box-shadow: 0 18px 50px rgba(112,73,165,.1);
+                font: 500 .76rem 'DM Mono',monospace;
+                line-height: 1.55;
+            }
+
+            .hero-orbit {
+                width: 290px;
+                aspect-ratio: .62;
+                border: 1px solid #e9def6;
+                border-radius: 50%;
+                background: radial-gradient(ellipse at 50% 48%,rgba(237,220,255,.64),rgba(255,255,255,.2) 60%);
+                box-shadow: inset 16px 0 0 rgba(235,222,251,.45),0 20px 50px rgba(144,101,204,.12);
+                transform: rotate(8deg);
+                animation: orbitFloat 6s ease-in-out infinite;
+                position: relative;
+            }
+
+            .hero-orbit:before, .hero-orbit:after {
+                content: none;
+            }
+
+            .hero-card {
+                position: absolute;
+                width: 360px;
+                height: 120px;
+                left: -70px;
+                top: 150px;
+                border: 3px solid rgba(38,29,54,.9);
+                border-radius: 0;
+                background: linear-gradient(180deg,#f4edff 0 76%,#d7bcff 76% 100%);
+                box-shadow: 0 0 24px rgba(135,84,232,.28);
+                transform: none;
+                z-index: 2;
+            }
+
+            .hero-card:before {
+                content: '';
+                position: absolute;
+                right: -9px;
+                top: -3px;
+                width: 4px;
+                height: 126px;
+                background: rgba(38,29,54,.9);
+            }
+
+            .hero-card:after {
+                content: '';
+                position: absolute;
+                width: 100px;
+                height: 25px;
+                left: 218px;
+                top: -35px;
+                border: 3px solid rgba(38,29,54,.9);
+                border-bottom: 0;
+                border-radius: 0;
+                background: rgba(255,255,255,.92);
+            }
+
+            .hero-fans {
+                position: absolute;
+                left: 18px;
+                top: 13px;
+                display: flex;
+                gap: 33px;
+            }
+
+            .hero-fan {
+                width: 88px;
+                height: 88px;
+                border: 3px solid rgba(38,29,54,.9);
+                border-radius: 50%;
+                background: transparent;
+                box-shadow: none;
+                animation: fanSpin var(--fan-speed,8s) linear infinite;
+                transition: filter .35s;
+            }
+
+            .hero-card:hover .hero-fan {
+                filter: drop-shadow(0 0 8px rgba(135,84,232,.5));
+            }
+
+            .hero-card-line {
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                height: 3px;
+                background: linear-gradient(90deg,rgba(135,84,232,.18),#a879ff 22%,#d8b5ff 78%,rgba(135,84,232,.18));
+                box-shadow: 0 0 12px rgba(168,121,255,.55);
+            }
+
+            .hero-orbit-line {
+                position: absolute;
+                inset: 0;
+                z-index: 3;
+                border-radius: 50%;
+                pointer-events: none;
+                background: conic-gradient(from -55deg,transparent 0 34%,rgba(233,222,246,.95) 34% 66%,transparent 66% 100%);
+                -webkit-mask: radial-gradient(transparent calc(100% - 2px),#000 calc(100% - 1px));
+                mask: radial-gradient(transparent calc(100% - 2px),#000 calc(100% - 1px));
+                filter: drop-shadow(0 0 7px rgba(216,181,255,.5));
+            }
+
+            .hero-readout {
+                display: flex;
+                gap: 9px;
+                margin-top: 22px;
+                color: var(--muted);
+                font: 500 .65rem 'DM Mono',monospace;
+            }
+
+            .hero-readout span {
+                padding: 8px 10px;
+                border: 1px solid #e8ddf3;
+                border-radius: 999px;
+                background: rgba(255,255,255,.75);
+                box-shadow: 0 5px 16px rgba(115,71,168,.06);
+            }
+
+            .about {
+                margin: 75px 0 20px;
+                padding: 34px 0;
+                border-top: 1px solid #eee7f6;
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                gap: 30px;
+            }
+
+            .about h2 {
+                margin: 0;
+                font-size: 1.7rem;
+                letter-spacing: -.06em;
+            }
+
+            .about p {
+                max-width: 620px;
+                margin: 0;
+                color: var(--muted);
+                line-height: 1.7;
+            }
+
+            .filter-dock {
+                position: sticky;
+                top: 12px;
+                z-index: 3;
+                padding: 10px 12px 0;
+                margin: 0 -12px;
+                border: 1px solid rgba(255,255,255,.72);
+                border-radius: 24px;
+                background: rgba(255,255,255,.68);
+                box-shadow: 0 12px 45px rgba(91,49,145,.13);
+                backdrop-filter: blur(18px);
+                transition: transform .32s ease,opacity .32s ease;
+            }
+
+            .filter-dock.is-hidden {
+                transform: translateY(calc(-100% - 18px));
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            .toolbar {
+                display: grid;
+                grid-template-columns: minmax(230px,1.8fr) repeat(3,minmax(130px,.7fr));
+                gap: 10px;
+                align-items: center;
+                margin-bottom: 14px;
+            }
+
+            input, select, button {
+                font: 500 .82rem 'DM Mono',monospace;
+                border: 1px solid #cdb9e7;
+                border-radius: 13px;
+                background: var(--card);
+                color: var(--ink);
+                height: 45px;
+                padding: 0 14px;
+                box-shadow: 0 5px 18px rgba(115,71,168,.07);
+            }
+
+            input:focus, select:focus {
+                outline: 3px solid rgba(190,117,255,.28);
+                border-color: var(--violet);
+            }
+
+            button {
+                cursor: pointer;
+                transition: transform .2s,box-shadow .2s;
+            }
+
+            button:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 24px rgba(106,57,166,.24);
+            }
+
+            .compare-trigger {
+                position: fixed;
+                right: 24px;
+                bottom: 24px;
+                z-index: 5;
+                height: 58px;
+                border: 1px solid rgba(255,255,255,.9);
+                border-radius: 20px;
+                color: #fff;
+                background: linear-gradient(125deg,#452073 0%,#8754e8 45%,#c58cff 100%);
+                box-shadow: 0 0 0 1px rgba(135,84,232,.16),0 0 28px rgba(135,84,232,.7),0 16px 34px rgba(70,33,115,.26);
+                font-weight: 700;
+                padding: 0 22px;
+                overflow: hidden;
+                isolation: isolate;
+                animation: pulseGlow 3s ease-in-out infinite,compareFloat 4s ease-in-out infinite;
+            }
+
+            .compare-trigger:before {
+                content: none;
+            }
+
+            .compare-trigger:after {
+                content: '';
+                position: absolute;
+                inset: -80% 45% -80% -20%;
+                z-index: -1;
+                background: linear-gradient(105deg,transparent,rgba(255,255,255,.45),transparent);
+                transform: rotate(18deg);
+                animation: buttonSweep 4s ease-in-out infinite;
+            }
+
+            .range-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+                padding: 12px 0 22px;
+                border-bottom: 1px solid var(--line);
+                font: 500 .75rem 'DM Mono',monospace;
+            }
+
+            .range-row input {
+                height: 8px;
+                padding: 0;
+                accent-color: var(--violet);
+                flex: 1;
+                box-shadow: none;
+                appearance: none;
+                border: 0;
+                background: linear-gradient(90deg,var(--range-color,#a86bff) var(--range-progress,100%),#eee8f6 var(--range-progress,100%));
+                transition: background .25s,filter .25s;
+            }
+
+            .range-row input::-webkit-slider-thumb {
+                appearance: none;
+                width: 21px;
+                height: 21px;
+                border: 3px solid #fff;
+                border-radius: 50%;
+                background: var(--range-color,#a86bff);
+                box-shadow: 0 0 0 2px var(--range-color,#a86bff),0 0 18px var(--range-color,#a86bff);
+                cursor: grab;
+            }
+
+            .range-row input:active {
+                filter: brightness(1.12);
+            }
+
+            .range-values {
+                min-width: 215px;
+                text-align: right;
+            }
+
+            .catalog-head {
+                display: flex;
+                justify-content: space-between;
+                align-items: end;
+                margin: 30px 0 14px;
+            }
+
+            .catalog-head h2 {
+                margin: 0;
+                font-size: 1.3rem;
+                letter-spacing: -.04em;
+            }
+
+            .catalog-head span {
+                color: var(--muted);
+                font: 500 .72rem 'DM Mono',monospace;
+            }
+
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(3,minmax(0,1fr));
+                gap: 16px;
+            }
+
+            .gpu {
+                background: linear-gradient(145deg,rgba(255,255,255,.96),rgba(248,242,255,.8));
+                border: 1px solid rgba(205,185,231,.8);
+                border-radius: 22px;
+                padding: 15px;
+                position: relative;
+                overflow: hidden;
+                animation: rise .55s both;
+                box-shadow: 0 12px 28px rgba(91,49,145,.08),inset 0 1px 0 #fff;
+                transition: transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s;
+            }
+
+            .gpu:before {
+                content: '';
+                position: absolute;
+                left: 18px;
+                right: 18px;
+                top: 0;
+                height: 3px;
+                border-radius: 0 0 8px 8px;
+                background: linear-gradient(90deg,#d8b5ff,#ffb6df,#a879ff);
+                box-shadow: 0 0 16px rgba(168,121,255,.6);
+                transform: scaleX(.35);
+                transform-origin: left;
+                transition: transform .35s ease;
+            }
+
+            .gpu:hover {
+                border-color: #b687ed;
+                transform: translateY(-10px) scale(1.015);
+                box-shadow: 0 22px 48px rgba(112,66,170,.22),0 0 28px rgba(190,117,255,.25),inset 0 1px 0 #fff;
+            }
+
+            .gpu:hover:before {
+                transform: scaleX(1);
+            }
+
+            .gpu-top {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .gpu-visual {
+                height: 96px;
+                margin-bottom: 14px;
+                border-radius: 15px;
+                border: 1px solid rgba(205,185,231,.68);
+                background: linear-gradient(135deg,rgba(235,221,255,.7),rgba(255,255,255,.9));
+                position: relative;
+                overflow: hidden;
+                box-shadow: inset 0 -1px 0 #fff;
+            }
+
+            .gpu-visual:before {
+                content: 'DREAMYFRAME / GPU CORE';
+                position: absolute;
+                top: 9px;
+                left: 12px;
+                color: rgba(75,35,127,.5);
+                font: 500 .53rem 'DM Mono',monospace;
+                letter-spacing: .08em;
+            }
+
+            .gpu-visual:after {
+                content: '';
+                position: absolute;
+                left: 12px;
+                right: 12px;
+                bottom: 9px;
+                height: 2px;
+                background: linear-gradient(90deg,transparent,var(--accent,#a879ff),transparent);
+                box-shadow: 0 0 12px var(--accent,#a879ff);
+            }
+
+            .fans {
+                position: absolute;
+                right: 12px;
+                top: 24px;
+                display: flex;
+                gap: 5px;
+            }
+
+            .fan {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                border: 2px solid rgba(255,255,255,.82);
+                background: radial-gradient(circle,#fff 0 10%,var(--accent,#a879ff) 11% 18%,transparent 19%),conic-gradient(from 20deg,rgba(135,84,232,.75),rgba(255,182,223,.85),rgba(135,84,232,.75));
+                box-shadow: 0 0 16px color-mix(in srgb,var(--accent,#a879ff) 45%,transparent);
+                animation: fanSpin 8s linear infinite;
+            }
+
+            .gpu-chip {
+                position: absolute;
+                left: 13px;
+                top: 35px;
+                width: 92px;
+                height: 39px;
+                border-radius: 6px;
+                border: 1px solid rgba(135,84,232,.3);
+                background: linear-gradient(135deg,rgba(255,255,255,.72),rgba(221,198,255,.72));
+                transform: skewX(-14deg);
+            }
+
+            .vendor {
+                font: 500 .7rem 'DM Mono',monospace;
+                text-transform: uppercase;
+                color: var(--violet);
+            }
+
+            .gpu h3 {
+                margin: 6px 0 4px;
+                font-size: 1.08rem;
+                letter-spacing: -.04em;
+            }
+
+            .price {
+                color: #a879ff;
+                font: 700 1rem 'DM Mono',monospace;
+                white-space: nowrap;
+                padding: 5px 7px;
+                border: 1px solid rgba(255,255,255,.95);
+                border-radius: 9px;
+                background: linear-gradient(135deg,rgba(255,255,255,.92),rgba(246,235,255,.78));
+                text-shadow: 0 1px 7px rgba(168,121,255,.28);
+                box-shadow: 0 0 15px rgba(205,160,255,.25),inset 0 0 8px rgba(255,255,255,.9);
+                animation: priceShimmer 4s ease-in-out infinite;
+            }
+
+            .price-stack {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 3px;
+            }
+
+            .original-price {
+                color: #a99bb8;
+                font: 500 .62rem 'DM Mono',monospace;
+                text-decoration: line-through;
+                white-space: nowrap;
+            }
+
+            .discount-badge {
+                color: #fff;
+                background: #d88bc1;
+                border-radius: 999px;
+                padding: 2px 6px;
+                font: 600 .58rem 'DM Mono',monospace;
+                box-shadow: 0 0 12px rgba(216,139,193,.35);
+            }
+
+            .meta {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                color: var(--muted);
+                font: 500 .7rem 'DM Mono',monospace;
+            }
+
+            .stats {
+                display: grid;
+                grid-template-columns: repeat(3,1fr);
+                border-top: 1px solid var(--line);
+                margin-top: 17px;
+                padding-top: 13px;
+                gap: 8px;
+            }
+
+            .stat small {
+                display: block;
+                color: var(--muted);
+                font: 500 .62rem 'DM Mono',monospace;
+                margin-bottom: 4px;
+            }
+
+            .stat strong {
+                font: 600 .95rem 'DM Mono',monospace;
+            }
+
+            .gpu-footer {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 17px;
+            }
+
+            .score {
+                color: var(--violet);
+                font: 600 .74rem 'DM Mono',monospace;
+            }
+
+            .add {
+                height: 32px;
+                padding: 0 9px;
+                background: var(--lavender);
+                font-size: .7rem;
+            }
+
+            .empty {
+                grid-column: 1/-1;
+                padding: 50px;
+                text-align: center;
+                border: 1px dashed var(--muted);
+                color: var(--muted);
+            }
+
+            .drawer {
+                position: fixed;
+                inset: 0;
+                background: rgba(39,19,61,.28);
+                display: none;
+                justify-content: flex-end;
+                z-index: 6;
+                backdrop-filter: blur(5px);
+            }
+
+            .drawer.open {
+                display: flex;
+                animation: drawerFade .3s ease both;
+            }
+
+            .panel {
+                width: min(900px,100%);
+                height: 100%;
+                overflow: auto;
+                padding: 30px;
+                background: linear-gradient(145deg,#fff,#f4eaff);
+                border-left: 1px solid #cdb9e7;
+                box-shadow: -20px 0 70px rgba(76,35,127,.2);
+                animation: slide .38s ease-out;
+            }
+
+            .panel-head {
+                display: flex;
+                justify-content: space-between;
+                align-items: start;
+                margin-bottom: 25px;
+            }
+
+            .panel h2 {
+                margin: 0;
+                font-size: 2rem;
+                letter-spacing: -.07em;
+            }
+
+            .close {
+                width: 40px;
+                padding: 0;
+                background: transparent;
+                font-size: 1.2rem;
+            }
+
+            .compare-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fit,minmax(145px,1fr));
+                gap: 9px;
+                margin-bottom: 22px;
+            }
+
+            .compare-chip {
+                border: 1px solid #cdb9e7;
+                border-radius: 14px;
+                padding: 12px;
+                background: var(--card);
+                min-height: 88px;
+            }
+
+            .compare-chip strong {
+                display: block;
+                font-size: .8rem;
+                margin: 6px 0;
+            }
+
+            .compare-delta {
+                display: block;
+                color: #7442c5;
+                font: 500 .64rem 'DM Mono',monospace;
+            }
+
+            .drawer.open .compare-chip {
+                animation: chipIn .45s cubic-bezier(.2,.8,.2,1) both;
+            }
+
+            .drawer.open .compare-chip:nth-child(2) {
+                animation-delay: .06s;
+            }
+
+            .drawer.open .compare-chip:nth-child(3) {
+                animation-delay: .12s;
+            }
+
+            .drawer.open .compare-chip:nth-child(4) {
+                animation-delay: .18s;
+            }
+
+            .drawer.open .compare-chip:nth-child(5) {
+                animation-delay: .24s;
+            }
+
+            .drawer.open tbody tr {
+                animation: rowIn .4s ease both;
+            }
+
+            .drawer.open tbody tr:nth-child(2) {
+                animation-delay: .05s;
+            }
+
+            .drawer.open tbody tr:nth-child(3) {
+                animation-delay: .1s;
+            }
+
+            .drawer.open tbody tr:nth-child(4) {
+                animation-delay: .15s;
+            }
+
+            .drawer.open tbody tr:nth-child(5) {
+                animation-delay: .2s;
+            }
+
+            .remove {
+                border: 0;
+                height: auto;
+                padding: 0;
+                color: #e65b4c;
+                background: transparent;
+                font-size: .65rem;
+            }
+
+            .table-wrap {
+                overflow-x: auto;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-family: 'DM Mono',monospace;
+                font-size: .75rem;
+            }
+
+            th,td {
+                text-align: left;
+                padding: 13px 10px;
+                border-bottom: 1px solid var(--line);
+                vertical-align: top;
+            }
+
+            th {
+                color: var(--muted);
+                font-size: .65rem;
+                text-transform: uppercase;
+                font-weight: 500;
+            }
+
+            td:not(:first-child) {
+                text-align: right;
+            }
+
+            .hint {
+                color: var(--muted);
+                font: 500 .7rem 'DM Mono',monospace;
+                margin: 0 0 18px;
+            }
+
+            .update-badge {
+                color: var(--muted);
+                font: 500 .62rem 'DM Mono',monospace;
+                margin-top: 10px;
+            }
+
+            @keyframes rise {
+                from {
+                    opacity: 0;
+                    transform: translateY(15px) scale(.98);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: none;
+                }
+            }
+
+            @keyframes fadeUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(14px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: none;
+                }
+            }
+
+            @keyframes float {
+                0%,100% {
+                    transform: translateY(0);
+                }
+
+                50% {
+                    transform: translateY(-18px);
+                }
+            }
+
+            @keyframes orbitFloat {
+                0%,100% {
+                    transform: rotate(8deg) translateY(0);
+                }
+
+                50% {
+                    transform: rotate(3deg) translateY(-15px);
+                }
+            }
+
+            @keyframes drift {
+                0% {
+                    opacity: 0;
+                    transform: translate3d(0,18px,0) scale(.5);
+                }
+
+                25%,75% {
+                    opacity: .72;
+                }
+
+                100% {
+                    opacity: 0;
+                    transform: translate3d(var(--move),-100px,0) scale(1.25);
+                }
+            }
+
+            @keyframes petalFall {
+                0% {
+                    opacity: 0;
+                    transform: translate3d(0,-30px,0) rotate(0deg);
+                }
+
+                12% {
+                    opacity: .8;
+                }
+
+                52% {
+                    opacity: .58;
+                }
+
+                100% {
+                    opacity: 0;
+                    transform: translate3d(var(--sway),115vh,0) rotate(620deg);
+                }
+            }
+
+            @keyframes blossomBreathe {
+                0%,100% {
+                    transform: scale(.8) rotate(-8deg);
+                    opacity: .38;
+                }
+
+                50% {
+                    transform: scale(1.16) rotate(8deg);
+                    opacity: .82;
+                }
+            }
+
+            @keyframes priceShimmer {
+                0%,100% {
+                    filter: brightness(1);
+                }
+
+                50% {
+                    filter: brightness(1.13);
+                }
+            }
+
+            @keyframes twinkle {
+                0%,100% {
+                    filter: brightness(1);
+                }
+
+                50% {
+                    filter: brightness(1.4);
+                }
+            }
+
+            @keyframes pulseGlow {
+                0%,100% {
+                    box-shadow: 0 0 0 1px rgba(135,84,232,.16),0 0 28px rgba(135,84,232,.7),0 16px 34px rgba(70,33,115,.26);
+                }
+
+                50% {
+                    box-shadow: 0 0 0 1px rgba(255,255,255,.32),0 0 42px rgba(205,139,255,.95),0 18px 40px rgba(70,33,115,.32);
+                }
+            }
+
+            @keyframes buttonSweep {
+                0%,35% {
+                    transform: translateX(-120%) rotate(18deg);
+                }
+
+                65%,100% {
+                    transform: translateX(280%) rotate(18deg);
+                }
+            }
+
+            @keyframes compareFloat {
+                0%,100% {
+                    transform: translateY(0);
+                }
+
+                50% {
+                    transform: translateY(-5px);
+                }
+            }
+
+            @keyframes drawerFade {
+                from {
+                    opacity: 0;
+                }
+
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes chipIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(12px) scale(.96);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: none;
+                }
+            }
+
+            @keyframes rowIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(12px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: none;
+                }
+            }
+
+            @keyframes fanSpin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <main class="shell">
+            <header>
+                <nav class="site-nav" aria-label="Main navigation">
+                    <a class="nav-brand" href="#top">
+                        <span class="mark">✦</span>
+                        <span>
+                            dreamy<br>frame x
+                        </span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="#compare">Compare</a>
+                        <a href="#how-it-works">How it works</a>
+                        <a href="#about">About</a>
+                    </div>
+                    <div class="nav-actions">
+                        <button class="lang-switch" type="button">EN / VI</button>
+                        <button class="watchlist" type="button">Watchlist 0</button>
+                    </div>
+                </nav>
+                <div class="hero-copy" id="top">
+                    <div>
+                        <div class="eyebrow">GPU prices, without the tab chaos ✦</div>
+                        <h1>
+                            Find the<br>
+                            <em>frame.</em>
+                            <br>
+                            <span style="color:var(--violet)">
+                                Pay the<br>fair price.
+                            </span>
+                        </h1>
+                        <p class="intro">Compare graphics cards from AMD, Intel, and NVIDIA across shopee.</p>
+                        <div class="hero-readout">
+                            <span>LIVE INDEX / 86 CARDS</span>
+                            <span>SHOPEE PRICES</span>
+                            <span>VNĐ DEALS</span>
+                        </div>
+                        <div class="update-badge" id="updateBadge">Loading latest prices…</div>
+                    </div>
+                    <div class="hero-orbit" aria-hidden="true">
+                        <div class="hero-card">
+                            <div class="hero-fans">
+                                <i class="hero-fan"></i>
+                                <i class="hero-fan"></i>
+                                <i class="hero-fan"></i>
+                            </div>
+                            <i class="hero-card-line"></i>
+                        </div>
+                        <i class="hero-orbit-line"></i>
+                    </div>
+                </div>
+            </header>
+            <div class="particles" aria-hidden="true">
+                <i class="particle" style="--x:8%;--y:68%;--size:5px;--glow:#c18bff;--duration:8s;--delay:-1s;--move:28px"></i>
+                <i class="particle" style="--x:18%;--y:36%;--size:3px;--glow:#ffb6df;--duration:10s;--delay:-5s;--move:-18px"></i>
+                <i class="particle" style="--x:30%;--y:82%;--size:4px;--glow:#a879ff;--duration:9s;--delay:-2s;--move:22px"></i>
+                <i class="particle" style="--x:44%;--y:28%;--size:3px;--glow:#d5b6ff;--duration:11s;--delay:-7s;--move:-25px"></i>
+                <i class="particle" style="--x:56%;--y:73%;--size:5px;--glow:#ffb6df;--duration:8s;--delay:-4s;--move:20px"></i>
+                <i class="particle" style="--x:68%;--y:44%;--size:3px;--glow:#a879ff;--duration:12s;--delay:-8s;--move:-28px"></i>
+                <i class="particle" style="--x:79%;--y:79%;--size:4px;--glow:#c18bff;--duration:9s;--delay:-3s;--move:18px"></i>
+                <i class="particle" style="--x:91%;--y:31%;--size:5px;--glow:#ffb6df;--duration:10s;--delay:-6s;--move:-22px"></i>
+                <i class="particle" style="--x:12%;--y:18%;--size:2px;--glow:#fff;--duration:7s;--delay:-2s;--move:15px"></i>
+                <i class="particle" style="--x:73%;--y:14%;--size:2px;--glow:#fff;--duration:8s;--delay:-4s;--move:-15px"></i>
+            </div>
+            <div class="sakura-field" aria-hidden="true">
+                <i class="petal" style="--x:4%;--size:13px;--petal:#ffc9e9;--duration:13s;--delay:-4s;--sway:70px"></i>
+                <i class="petal" style="--x:11%;--size:9px;--petal:#f6b7df;--duration:16s;--delay:-12s;--sway:-55px"></i>
+                <i class="petal" style="--x:19%;--size:12px;--petal:#ffd8ef;--duration:12s;--delay:-7s;--sway:85px"></i>
+                <i class="petal" style="--x:27%;--size:8px;--petal:#efb3db;--duration:18s;--delay:-15s;--sway:-72px"></i>
+                <i class="petal" style="--x:35%;--size:11px;--petal:#ffc6e7;--duration:14s;--delay:-2s;--sway:52px"></i>
+                <i class="petal" style="--x:43%;--size:9px;--petal:#f8c3e5;--duration:17s;--delay:-9s;--sway:-90px"></i>
+                <i class="petal" style="--x:51%;--size:13px;--petal:#ffd6ee;--duration:15s;--delay:-11s;--sway:65px"></i>
+                <i class="petal" style="--x:60%;--size:8px;--petal:#edaed8;--duration:19s;--delay:-5s;--sway:-48px"></i>
+                <i class="petal" style="--x:68%;--size:12px;--petal:#ffc9e9;--duration:13s;--delay:-13s;--sway:92px"></i>
+                <i class="petal" style="--x:76%;--size:9px;--petal:#f4b8df;--duration:16s;--delay:-3s;--sway:-62px"></i>
+                <i class="petal" style="--x:84%;--size:13px;--petal:#ffd8ef;--duration:14s;--delay:-8s;--sway:76px"></i>
+                <i class="petal" style="--x:93%;--size:8px;--petal:#efb3db;--duration:18s;--delay:-16s;--sway:-82px"></i>
+                <i class="blossom" style="--x:7%;--y:24%;--size:25px;--blossom:#efb3db;--duration:5s;--delay:-1s">✿</i>
+                <i class="blossom" style="--x:23%;--y:70%;--size:18px;--blossom:#ffc9e9;--duration:7s;--delay:-4s">✿</i>
+                <i class="blossom" style="--x:47%;--y:18%;--size:22px;--blossom:#f2b3dc;--duration:6s;--delay:-2s">✿</i>
+                <i class="blossom" style="--x:64%;--y:82%;--size:20px;--blossom:#ffd1ec;--duration:8s;--delay:-5s">✿</i>
+                <i class="blossom" style="--x:88%;--y:26%;--size:26px;--blossom:#efb3db;--duration:6s;--delay:-3s">✿</i>
+                <i class="blossom" style="--x:96%;--y:67%;--size:16px;--blossom:#ffc9e9;--duration:7s;--delay:-6s">✿</i>
+            </div>
+            <div id="how-it-works"></div>
+            <div class="filter-dock" id="filterDock">
+                <section class="toolbar" aria-label="GPU filters">
+                    <input id="search" type="search" placeholder="Search name, series, VRAM, PSU..." aria-label="Search GPUs">
+                    <select id="vendor">
+                        <option value="all">All brands</option>
+                        <option>NVIDIA</option>
+                        <option>AMD</option>
+                        <option>Intel</option>
+                    </select>
+                    <select id="sort">
+                        <option value="strength">Strongest first</option>
+                        <option value="weakness">Weakest first</option>
+                        <option value="coolest">Coolest first</option>
+                        <option value="hottest">Hottest first</option>
+                        <option value="psuHigh">Highest PSU</option>
+                        <option value="psuLow">Lowest PSU</option>
+                        <option value="cheap">Cheapest first</option>
+                        <option value="costly">Costliest first</option>
+                        <option value="value">Best price / performance</option>
+                        <option value="badValue">Worst price / performance</option>
+                    </select>
+                    <select id="vram">
+                        <option value="all">Any VRAM</option>
+                        <option value="8">8 GB or less</option>
+                        <option value="12">12 GB or less</option>
+                        <option value="16">16 GB or less</option>
+                        <option value="20">20 GB or more</option>
+                    </select>
+                </section>
+                <div class="range-row">
+                    <span>PRICE RANGE</span>
+                    <input id="priceRange" type="range" min="0" max="100" step="1" value="100" aria-label="Maximum price">
+                    <span class="range-values" id="rangeLabel">Up to 100.000.000₫</span>
+                </div>
+            </div>
+            <button class="compare-trigger" id="openCompare">
+                Compare GPU <span id="compareCount">0</span>
+                /5
+            </button>
+            <div class="catalog-head" id="compare">
+                <h2>Best deals, sorted.</h2>
+                <span id="resultCount"></span>
+            </div>
+            <section class="grid" id="grid"></section>
+            <section class="about" id="about">
+                <h2>About</h2>
+                <p>
+                    Hi, this is made by Dreamy.<br>
+                    Tiktok : https://www.tiktok.com/@dreamy.setupvn?_r=1&_t=ZS-98IsFR1lAzl<br>
+                    Discord : https://discord.gg/FzV66vCNBG<br>
+                    <br>
+                    DreamyFrame X turns your gpu shoping chaos into a calm, useful shortlist, so finding your next gpu feels a little more magical.<br>
+                    <br>Thông tin có thể không đúng sự thật nhưng theo tôi thì nó đúng khoảng 80% :3
+                </p>
+            </section>
+        </main>
+        <aside class="drawer" id="drawer" aria-hidden="true">
+            <div class="panel">
+                <div class="panel-head">
+                    <div>
+                        <div class="eyebrow">Side-by-side lab</div>
+                        <h2>Compare GPUs</h2>
+                    </div>
+                    <button class="close" id="closeCompare" aria-label="Close comparison">×</button>
+                </div>
+                <p class="hint">Select up to five cards from the index. Your picks stay here while you filter.</p>
+                <div class="compare-list" id="compareList"></div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th id="head0">—</th>
+                                <th id="head1">—</th>
+                                <th id="head2">—</th>
+                                <th id="head3">—</th>
+                                <th id="head4">—</th>
+                            </tr>
+                        </thead>
+                        <tbody id="compareTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </aside>
+        <script>
+            const gpus = [['RTX PRO 6000 Blackwell Workstation', 'NVIDIA', 96, 100000, 85, 600, 609], ['RTX 5090', 'NVIDIA', 32, 100000, 88, 575, 491], ['RTX 5090 D', 'NVIDIA', 32, 95000, 86, 575, 491], ['RTX 4090', 'NVIDIA', 24, 60000, 78, 450, 412], ['RTX 4090 D', 'NVIDIA', 24, 58000, 78, 425, 389], ['RTX 5080', 'NVIDIA', 16, 50000, 76, 360, 357], ['RX 7900 XTX', 'AMD', 24, 30000, 76, 355, 347], ['RTX 4080', 'NVIDIA', 16, 23000, 74, 320, 346], ['RTX 4080 SUPER', 'NVIDIA', 16, 24000, 74, 320, 336], ['RX 9070 XT', 'AMD', 16, 24000, 72, 304, 334], ['RX 7900 XT', 'AMD', 20, 22000, 74, 315, 297], ['RX 7900 GRE', 'AMD', 16, 20000, 72, 260, 260], ['RX 6950 XT', 'AMD', 16, 13700, 78, 335, 296], ['RX 9070', 'AMD', 16, 28000, 70, 220, 293], ['RTX 5070 Ti', 'NVIDIA', 16, 32000, 72, 300, 280], ['RTX 5070', 'NVIDIA', 12, 25000, 70, 250, 274], ['RTX 4070 Ti SUPER', 'NVIDIA', 16, 22000, 69, 285, 272], ['RTX 4070 Ti', 'NVIDIA', 12, 22000, 68, 285, 272], ['RX 6900 XT', 'AMD', 16, 13700, 78, 300, 270], ['RX 6800 XT', 'AMD', 16, 10000, 73, 300, 257], ['RTX 3090 Ti', 'NVIDIA', 24, 20000, 83, 450, 252], ['RTX 4070 SUPER', 'NVIDIA', 12, 20000, 66, 220, 239], ['RX 7800 XT', 'AMD', 16, 16000, 69, 263, 209], ['RTX 3080 12GB', 'NVIDIA', 12, 16000, 77, 350, 208], ['RTX 4070', 'NVIDIA', 12, 18000, 64, 200, 199], ['RX 6800', 'AMD', 16, 13000, 72, 250, 198], ['RTX 3090', 'NVIDIA', 24, 18000, 82, 350, 191], ['RX 7700 XT', 'AMD', 12, 15000, 70, 245, 189], ['RX 9060 XT', 'AMD', 16, 20000, 68, 190, 187], ['RTX 5060 Ti', 'NVIDIA', 16, 20000, 67, 180, 187], ['RX 6750 XT', 'AMD', 12, 7500, 76, 250, 179], ['RTX 4060 Ti', 'NVIDIA', 8, 12000, 66, 160, 168], ['RTX 2080 Ti', 'NVIDIA', 11, 7000, 78, 250, 169], ['RTX 3070 Ti', 'NVIDIA', 8, 12000, 75, 290, 164], ['RTX 2080 SUPER', 'NVIDIA', 8, 6700, 75, 250, 156], ['RTX 3070', 'NVIDIA', 8, 10000, 73, 220, 151], ['RTX 5060', 'NVIDIA', 8, 12000, 64, 145, 147], ['RX 7600 XT', 'AMD', 16, 8000, 65, 190, 144], ['RTX 2070 SUPER', 'NVIDIA', 8, 5000, 73, 215, 144], ['RTX 4060', 'NVIDIA', 8, 9000, 63, 115, 120], ['RX 5700 XT', 'AMD', 8, 4000, 75, 225, 134], ['GTX 1080 Ti', 'NVIDIA', 11, 5200, 84, 250, 124], ['RTX 3060 Ti', 'NVIDIA', 8, 7200, 72, 200, 127], ['Arc A770', 'Intel', 16, 10000, 72, 225, 165], ['Arc A750', 'Intel', 8, 7500, 70, 225, 142], ['Arc B580', 'Intel', 12, 9850, 68, 190, 139], ['RX 6600 XT', 'AMD', 8, 5500, 68, 160, 138], ['RTX 3050', 'NVIDIA', 8, 5500, 70, 130, 72], ['GTX 1660 SUPER', 'NVIDIA', 6, 3600, 73, 125, 76], ['RX 6600', 'AMD', 8, 5500, 66, 132, 108], ['RX 6500 XT', 'AMD', 4, 3000, 72, 107, 82], ['GTX 1060 6GB', 'NVIDIA', 6, 1800, 78, 120, 59], ['GTX 1650', 'NVIDIA', 4, 2700, 67, 75, 50], ['RX 580', 'AMD', 8, 2500, 78, 185, 62], ['Arc A380', 'Intel', 6, 6000, 72, 75, 43], ['GT 730', 'NVIDIA', 2, 1200, 76, 49, 7], ['RTX 3060', 'NVIDIA', 12, 6800, 74, 200, 115]].map( (x, i) => ({
+                id: i,
+                name: x[0],
+                vendor: x[1],
+                vram: x[2],
+                price: x[3] * 1000,
+                temp: x[4],
+                watt: x[5],
+                fps: x[6],
+                score: x[6] * 82
+            }));
+            const supplemental = [['GTX 780 Ti', 'NVIDIA', 3, 1700000, 82, 250, 42], ['GTX 780', 'NVIDIA', 3, 1500000, 80, 230, 38], ['GTX 770', 'NVIDIA', 2, 1400000, 79, 230, 34], ['GTX 760', 'NVIDIA', 2, 1250000, 78, 170, 29], ['GTX 750 Ti', 'NVIDIA', 2, 1200000, 72, 60, 23], ['GTX 750', 'NVIDIA', 1, 1200000, 70, 55, 18], ['GTX 980 Ti', 'NVIDIA', 6, 2000000, 82, 250, 86], ['GTX 980', 'NVIDIA', 4, 1900000, 79, 165, 65], ['GTX 970', 'NVIDIA', 4, 1750000, 78, 145, 55], ['GTX 960', 'NVIDIA', 2, 1600000, 76, 120, 37], ['GTX 950', 'NVIDIA', 2, 1300000, 74, 90, 28], ['GTX 1080', 'NVIDIA', 8, 4000000, 79, 180, 98], ['GTX 1070 Ti', 'NVIDIA', 8, 3800000, 78, 180, 83], ['GTX 1070', 'NVIDIA', 8, 3300000, 77, 150, 81], ['GTX 1050 Ti', 'NVIDIA', 4, 1500000, 72, 75, 35], ['GTX 1050', 'NVIDIA', 2, 1500000, 70, 75, 31], ['GTX 1660 Ti', 'NVIDIA', 6, 3800000, 74, 120, 77], ['GTX 1660', 'NVIDIA', 6, 3200000, 73, 120, 72], ['GTX Titan', 'NVIDIA', 6, 2300000, 82, 250, 43], ['R9 280X', 'AMD', 3, 1400000, 82, 250, 34], ['R9 270X', 'AMD', 2, 950000, 79, 180, 27], ['R7 250X', 'AMD', 2, 900000, 74, 80, 18], ['RX Vega 64', 'AMD', 8, 4500000, 85, 295, 94], ['RX Vega 56', 'AMD', 8, 2300000, 83, 210, 89], ['RX 550', 'AMD', 4, 1200000, 74, 50, 30], ['RX 5700', 'AMD', 8, 6000000, 77, 180, 116], ['Radeon VII', 'AMD', 16, 3800000, 81, 300, 110], ['Arc A310', 'Intel', 4, 2500000, 70, 75, 32], ['Arc A580', 'Intel', 8, 6000000, 72, 185, 126]].map( (x, i) => ({
+                id: gpus.length + i,
+                name: x[0],
+                vendor: x[1],
+                vram: x[2],
+                price: x[3],
+                temp: x[4],
+                watt: x[5],
+                fps: x[6],
+                score: x[6] * 82
+            }));
+            gpus.push(...supplemental);
+            gpus.push({
+                id: gpus.length,
+                name: 'RX 6700 XT',
+                vendor: 'AMD',
+                vram: 12,
+                price: 7500000,
+                temp: 76,
+                watt: 230,
+                fps: 168,
+                score: 13776
+            });
+            gpus.push({
+                id: gpus.length,
+                name: 'RX 5600 XT',
+                vendor: 'AMD',
+                vram: 6,
+                price: 3500000,
+                temp: 76,
+                watt: 150,
+                fps: 104,
+                score: 8533
+            });
+            for (let index = gpus.length - 1; index >= 0; index--) {
+                if (gpus[index].name === 'RX 5700' || gpus[index].name === 'RX 9070')
+                    gpus.splice(index, 1);
+            }
+            const customDeals = {
+                'RTX 3070 Ti': {
+                    price: 9000000
+                },
+                'RTX 3070': {
+                    price: 8000000,
+                    discountRange: [20, 23]
+                },
+                'RTX 3080 12GB': {
+                    price: 14000000,
+                    discountRange: [25, 30]
+                },
+                'RTX 4080': {
+                    price: 25000000
+                },
+                'RTX 4080 SUPER': {
+                    price: 32000000
+                },
+                'RX 5700 XT': {
+                    price: 4700000
+                },
+                'RX 5600 XT': {
+                    price: 3500000
+                }
+            };
+            gpus.forEach(g => {
+                if (customDeals[g.name]) {
+                    g.price = customDeals[g.name].price;
+                    g.discountRange = customDeals[g.name].discountRange;
+                }
+            }
+            );
+            const randomInteger = (minimum, maximum) => Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+            gpus.forEach(g => {
+                const range = g.discountRange || (g.price < 15000000 ? [17, 21] : g.price <= 30000000 ? [9, 11] : [0, 1]);
+                g.discount = randomInteger(range[0], range[1]);
+            }
+            );
+
+            /* ---- live price overlay ------------------------------------
+               gpu-prices.json is written by scrape-shopee.js (run via cron
+               on the server). Shape: { "updatedAt": "...", "prices": {
+               "<gpu name>": { "price": 12345000, "discount": 12,
+               "url": "https://shopee.vn/..." } } }
+               If the file is missing or a model isn't in it yet, the
+               hand-tuned numbers above are used as a fallback so the site
+               never shows a blank/broken card. ------------------------- */
+            async function applyLivePrices() {
+                const badge = document.querySelector('#updateBadge');
+                try {
+                    const res = await fetch('gpu-prices.json', {
+                        cache: 'no-store'
+                    });
+                    if (!res.ok)
+                        throw new Error('no price feed yet');
+                    const feed = await res.json();
+                    let matched = 0;
+                    gpus.forEach(g => {
+                        const live = feed.prices && feed.prices[g.name];
+                        if (live && live.price) {
+                            g.originalPrice = g.price;
+                            g.price = live.price;
+                            if (typeof live.discount === 'number')
+                                g.discount = live.discount;
+                            if (live.url)
+                                g.buyUrl = live.url;
+                            g.live = true;
+                            matched++;
+                        }
+                    }
+                    );
+                    if (badge) {
+                        const when = feed.updatedAt ? new Date(feed.updatedAt).toLocaleString('vi-VN') : 'unknown';
+                        badge.textContent = matched ? `Live Shopee prices for ${matched}/${gpus.length} cards · updated ${when}` : `No live matches yet · showing reference prices · feed updated ${when}`;
+                    }
+                } catch (err) {
+                    if (badge)
+                        badge.textContent = 'Showing reference prices (live feed unavailable)';
+                } finally {
+                    render();
+                    updateCompare();
+                }
+            }
+
+            let selected = [];
+            const money = n => new Intl.NumberFormat('vi-VN',{
+                maximumFractionDigits: 0
+            }).format(Math.round(n)) + '₫';
+            const recommendedPsu = watt => watt <= 100 ? 300 : watt <= 160 ? 450 : watt <= 220 ? 550 : watt <= 300 ? 650 : watt <= 400 ? 750 : watt <= 500 ? 850 : 1000;
+            const dealPrice = g => Math.round(g.price * (1 - g.discount / 100));
+            const compact = n => money(n);
+            const rangePrice = position => {
+                if (position <= 30)
+                    return position / 30 * 3000000;
+                if (position <= 45)
+                    return 3000000 + (position - 30) / 15 * 7000000;
+                if (position <= 65)
+                    return 10000000 + (position - 45) / 20 * 20000000;
+                return 30000000 + (position - 65) / 35 * 70000000;
+            }
+            ;
+            const grid = document.querySelector('#grid');
+            function render() {
+                const query = document.querySelector('#search').value.toLowerCase().trim()
+                  , brand = document.querySelector('#vendor').value
+                  , vram = Number(document.querySelector('#vram').value) || 0
+                  , max = rangePrice(Number(document.querySelector('#priceRange').value));
+                let list = gpus.filter(g => (!query || `${g.name} ${g.vendor} ${g.vram}gb ${recommendedPsu(g.watt)}w`.toLowerCase().includes(query)) && (brand === 'all' || g.vendor === brand) && g.vram >= vram && dealPrice(g) <= max);
+                const mode = document.querySelector('#sort').value
+                  , metric = {
+                    strength: 'fps',
+                    weakness: 'fps',
+                    coolest: 'temp',
+                    hottest: 'temp',
+                    psuHigh: 'psu',
+                    psuLow: 'psu',
+                    cheap: 'price',
+                    costly: 'price',
+                    value: 'value',
+                    badValue: 'value'
+                }[mode];
+                list.sort( (a, b) => {
+                    const getValue = g => metric === 'value' ? g.fps / dealPrice(g) : metric === 'price' ? dealPrice(g) : metric === 'psu' ? recommendedPsu(g.watt) : g[metric];
+                    const av = getValue(a)
+                      , bv = getValue(b);
+                    return ['weakness', 'coolest', 'psuLow', 'cheap', 'badValue'].includes(mode) ? av - bv : bv - av
+                }
+                );
+                document.querySelector('#resultCount').textContent = `${list.length} cards / ${gpus.length} indexed`;
+                grid.innerHTML = list.length ? list.map( (g, i) => `<article class="gpu" style="animation-delay:${Math.min(i * 22, 300)}ms"><div class="gpu-top"><div><div class="vendor">${g.vendor}${g.live ? ' · LIVE' : ''}</div><h3>${g.name}</h3><div class="meta"><span>${g.vram} GB VRAM</span><span>PSU ${recommendedPsu(g.watt)}W+</span></div></div><div class="price-stack"><span class="discount-badge">-${g.discount}%</span><span class="original-price">${money(g.price)}</span><div class="price">${money(dealPrice(g))}</div></div></div><div class="stats"><div class="stat"><small>MAX LOAD</small><strong>${g.temp}°C</strong></div><div class="stat"><small>FURMARK</small><strong>${g.score.toLocaleString()}</strong></div><div class="stat"><small>CP2077 LOW</small><strong>${g.fps} FPS</strong></div></div><div class="gpu-footer"><span class="score">${money(dealPrice(g) / g.fps)} / FPS</span><button class="add" onclick="toggleSelect(${g.id})">${selected.includes(g.id) ? '✓ Added' : '+ Compare'}</button></div></article>`).join('') : '<div class="empty">No cards match those filters. Try widening the price range.</div>';
+            }
+            function toggleSelect(id) {
+                if (selected.includes(id))
+                    selected = selected.filter(x => x !== id);
+                else if (selected.length < 5)
+                    selected.push(id);
+                else
+                    return alert('Comparison is limited to five GPUs.');
+                updateCompare();
+                render();
+            }
+            function updateCompare() {
+                document.querySelector('#compareCount').textContent = selected.length;
+                const picks = selected.map(id => gpus.find(g => g.id === id));
+                const slowest = picks.length ? Math.min(...picks.map(g => g.fps)) : 0;
+                document.querySelector('#compareList').innerHTML = picks.length ? picks.map(g => {
+                    const delta = slowest ? Math.round((g.fps / slowest - 1) * 100) : 0;
+                    return `<div class="compare-chip"><div class="vendor">${g.vendor}</div><strong>${g.name}</strong><span class="compare-delta">${delta ? `+${delta}% FPS vs slowest` : 'Baseline FPS'}</span><button class="remove" onclick="toggleSelect(${g.id})">Remove</button></div>`
+                }
+                ).join('') : '<div class="empty">Add GPUs from the index to start comparing.</div>';
+                [0, 1, 2, 3, 4].forEach( (i) => document.querySelector('#head' + i).textContent = picks[i]?.name || '—');
+                const rows = [['Price', g => `${money(dealPrice(g))} (-${g.discount}%)`], ['Original price', g => money(g.price)], ['VRAM', g => g.vram + ' GB'], ['Max load', g => g.temp + '°C'], ['FurMark', g => g.score.toLocaleString()], ['Cyberpunk 2077', g => g.fps + ' FPS'], ['Recommended PSU', g => recommendedPsu(g.watt) + 'W+'], ['FPS advantage', g => slowest ? `+${Math.round((g.fps / slowest - 1) * 100)}% vs slowest` : '—'], ['Value', g => money(dealPrice(g) / g.fps) + ' / FPS']];
+                document.querySelector('#compareTable').innerHTML = rows.map( ([label,fn]) => `<tr><th>${label}</th>${[0, 1, 2, 3, 4].map(i => `<td>${picks[i] ? fn(picks[i]) : '—'}</td>`).join('')}</tr>`).join('');
+            }
+            const slider = document.querySelector('#priceRange');
+            const updateSlider = () => {
+                const position = Number(slider.value);
+                const hue = position < 45 ? '#a86bff' : position < 65 ? '#8e55e8' : '#7442c5';
+                slider.style.setProperty('--range-progress', position + '%');
+                slider.style.setProperty('--range-color', hue);
+                document.querySelector('#rangeLabel').textContent = 'Up to ' + money(rangePrice(position));
+            }
+            ;
+            ['search', 'vendor', 'sort', 'vram'].forEach(id => document.querySelector('#' + id).addEventListener('input', render));
+            slider.addEventListener('input', () => {
+                updateSlider();
+                render()
+            }
+            );
+            document.querySelector('#openCompare').onclick = () => {
+                document.querySelector('#drawer').classList.add('open');
+                document.querySelector('#drawer').setAttribute('aria-hidden', 'false');
+                updateCompare()
+            }
+            ;
+            document.querySelector('#closeCompare').onclick = () => {
+                document.querySelector('#drawer').classList.remove('open');
+                document.querySelector('#drawer').setAttribute('aria-hidden', 'true')
+            }
+            ;
+            document.querySelector('#drawer').addEventListener('click', e => {
+                if (e.target.id === 'drawer')
+                    document.querySelector('#closeCompare').click()
+            }
+            );
+            const heroCard = document.querySelector('.hero-card');
+            let fanRamp;
+            const rampFans = (start, end, duration) => {
+                clearInterval(fanRamp);
+                const started = performance.now();
+                fanRamp = setInterval( () => {
+                    const progress = Math.min((performance.now() - started) / duration, 1);
+                    const speed = start + (end - start) * progress;
+                    heroCard.style.setProperty('--fan-speed', speed.toFixed(2) + 's');
+                    if (progress === 1)
+                        clearInterval(fanRamp)
+                }
+                , 40)
+            }
+            ;
+            heroCard.addEventListener('pointerenter', () => rampFans(8, .42, 1400));
+            heroCard.addEventListener('pointerleave', () => rampFans(.42, 8, 900));
+            const filterDock = document.querySelector('#filterDock');
+            let lastScroll = window.scrollY;
+            window.addEventListener('scroll', () => {
+                const current = window.scrollY;
+                if (current > lastScroll + 8 && current > 140)
+                    filterDock.classList.add('is-hidden');
+                else if (current < lastScroll - 3)
+                    filterDock.classList.remove('is-hidden');
+                lastScroll = current
+            }
+            , {
+                passive: true
+            });
+            updateSlider();
+            render();
+            updateCompare();
+            applyLivePrices();
+        </script>
+    </body>
+</html>
