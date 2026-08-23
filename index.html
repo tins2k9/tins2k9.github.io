@@ -1330,9 +1330,12 @@
             }
             );
             const randomInteger = (minimum, maximum) => Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
-            gpus.forEach(g => {
+            function rollDiscount(g) {
                 const range = g.discountRange || (g.price < 15000000 ? [17, 21] : g.price <= 30000000 ? [9, 11] : [0, 1]);
-                g.discount = randomInteger(range[0], range[1]);
+                return randomInteger(range[0], range[1]);
+            }
+            gpus.forEach(g => {
+                g.discount = rollDiscount(g);
             }
             );
 
@@ -1471,40 +1474,57 @@
             async function applyLivePrices() {
                 const badge = document.querySelector('#updateBadge');
                 const t = TXT[LANG];
+                let feed = null;
                 try {
                     const res = await fetch('gpu-prices.json', {
                         cache: 'no-store'
                     });
                     if (!res.ok)
                         throw new Error('no price feed yet');
-                    const feed = await res.json();
-                    let matched = 0;
-                    gpus.forEach(g => {
-                        const live = feed.prices && feed.prices[g.name];
-                        if (live && live.price) {
+                    feed = await res.json();
+                } catch (err) {
+                    feed = null;
+                }
+
+                let matched = 0;
+                gpus.forEach(g => {
+                    const live = feed && feed.prices && feed.prices[g.name];
+                    if (live && live.price) {
+                        if (!g.live)
                             g.originalPrice = g.price;
-                            g.price = live.price;
-                            if (typeof live.discount === 'number')
-                                g.discount = live.discount;
-                            if (live.url)
-                                g.buyUrl = live.url;
-                            g.live = true;
-                            matched++;
-                        }
+                        g.price = live.price;
+                        if (typeof live.discount === 'number')
+                            g.discount = live.discount;
+                        else
+                            g.discount = rollDiscount(g);
+                        if (live.url)
+                            g.buyUrl = live.url;
+                        g.live = true;
+                        matched++;
+                    } else {
+                        // No live match this cycle (or no feed at all): fall back to
+                        // the reference price, and re-roll a fresh random discount so
+                        // the card still visibly "updates" every refresh instead of
+                        // sitting frozen on the value it was first given.
+                        if (g.live && g.originalPrice)
+                            g.price = g.originalPrice;
+                        g.live = false;
+                        g.discount = rollDiscount(g);
                     }
-                    );
-                    if (badge) {
+                }
+                );
+
+                if (badge) {
+                    if (feed) {
                         const when = feed.updatedAt ? new Date(feed.updatedAt).toLocaleString(LANG === 'vi' ? 'vi-VN' : 'en-US') : 'unknown';
                         badge.textContent = matched ? t.livePricesFound(matched, gpus.length, when) : t.noLiveMatches(when);
-                    }
-                } catch (err) {
-                    if (badge)
+                    } else {
                         badge.textContent = t.feedUnavailable;
-                } finally {
-                    render();
-                    updateCompare();
-                    refreshDeadline = Date.now() + REFRESH_INTERVAL_MS;
+                    }
                 }
+                render();
+                updateCompare();
+                refreshDeadline = Date.now() + REFRESH_INTERVAL_MS;
             }
 
             const REFRESH_INTERVAL_MS = 60000;
