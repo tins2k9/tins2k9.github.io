@@ -3,7 +3,14 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>test and copy by quoctin.io.vn</title>
+        <title>DreamyFrame X | So sánh giá GPU trên Shopee</title>
+        <meta name="description" content="DreamyFrame X — so sánh giá và thông số card đồ họa AMD, Intel, NVIDIA trên Shopee, giá tự động cập nhật.">
+        <meta property="og:title" content="DreamyFrame X | GPU price lab">
+        <meta property="og:description" content="So sánh giá và thông số card đồ họa AMD, Intel, NVIDIA trên Shopee.">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="logo.png">
+        <meta name="twitter:card" content="summary_large_image">
+        <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238754e8'/%3E%3Cstop offset='1' stop-color='%23be75ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3C/svg%3E">
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,700;6..96,900&family=Bungee&family=DM+Mono:wght@400;500&family=Fredoka:wght@500;600;700&family=Lobster&family=Outfit:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap'); :root {
                 --ink: #21172f;
@@ -1138,6 +1145,191 @@
                     transform: rotate(360deg);
                 }
             }
+
+            /* ---- watchlist star ---- */
+            .watch-toggle {
+                background: none;
+                border: none;
+                box-shadow: none;
+                height: auto;
+                padding: 0;
+                font-size: 1.15rem;
+                line-height: 1;
+                color: #d6cce6;
+                transition: color .2s,transform .2s;
+            }
+
+            .watch-toggle:hover {
+                transform: scale(1.15);
+                box-shadow: none;
+            }
+
+            .watch-toggle.active {
+                color: var(--violet);
+            }
+
+            .watchlist.active {
+                background: var(--lavender);
+            }
+
+            /* ---- buy button ---- */
+            .buy-row {
+                margin-top: 10px;
+            }
+
+            .buy-btn {
+                display: block;
+                width: 100%;
+                text-align: center;
+                height: 38px;
+                line-height: 38px;
+                padding: 0;
+                border-radius: 12px;
+                text-decoration: none;
+                color: #fff;
+                background: linear-gradient(125deg,#452073,#8754e8 60%,#c58cff);
+                font: 600 .72rem 'DM Mono',monospace;
+                text-transform: uppercase;
+                letter-spacing: .04em;
+                box-shadow: 0 8px 18px rgba(115,71,168,.22);
+                transition: transform .2s,box-shadow .2s;
+            }
+
+            .buy-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 24px rgba(106,57,166,.3);
+            }
+
+            /* ---- price trend / sparkline ---- */
+            .trend {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                margin-top: 4px;
+                font: 600 .62rem 'DM Mono',monospace;
+            }
+
+            .sparkline {
+                width: 40px;
+                height: 14px;
+                overflow: visible;
+            }
+
+            .sparkline polyline {
+                fill: none;
+                stroke-width: 1.6;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+
+            .trend-down {
+                color: #3fa876;
+            }
+
+            .trend-down .sparkline polyline {
+                stroke: #3fa876;
+            }
+
+            .trend-up {
+                color: #e65b4c;
+            }
+
+            .trend-up .sparkline polyline {
+                stroke: #e65b4c;
+            }
+
+            .trend-flat {
+                color: var(--muted);
+            }
+
+            .trend-flat .sparkline polyline {
+                stroke: var(--muted);
+            }
+
+            /* ---------------- mobile ---------------- */
+            @media (max-width: 900px) {
+                html, body {
+                    min-width: 0;
+                }
+
+                .shell {
+                    min-width: 0;
+                    width: 100%;
+                    padding: 0 16px 60px;
+                }
+
+                .site-nav {
+                    grid-template-columns: auto auto;
+                    justify-content: space-between;
+                }
+
+                .nav-links {
+                    display: none;
+                }
+
+                .hero-copy {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    padding: 34px 4%;
+                    min-height: 0;
+                    gap: 24px;
+                }
+
+                h1 {
+                    font-size: clamp(2.4rem,11vw,3.4rem);
+                }
+
+                .intro {
+                    max-width: 100%;
+                }
+
+                .hero-orbit {
+                    display: none;
+                }
+
+                .filter-dock {
+                    top: 6px;
+                    margin: 0 -8px;
+                }
+
+                .toolbar {
+                    grid-template-columns: 1fr;
+                }
+
+                .range-row {
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+
+                .range-values {
+                    min-width: 0;
+                    text-align: left;
+                }
+
+                .grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .compare-trigger {
+                    right: 14px;
+                    bottom: 14px;
+                    height: 50px;
+                    padding: 0 16px;
+                    font-size: .8rem;
+                }
+
+                .about {
+                    grid-template-columns: 1fr;
+                }
+
+                .panel {
+                    width: 100%;
+                }
+
+                .compare-list {
+                    grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+                }
+            }
         </style>
     </head>
     <body>
@@ -1157,7 +1349,7 @@
                     </div>
                     <div class="nav-actions">
                         <button class="lang-switch" type="button" id="langBtn">VI</button>
-                        <button class="watchlist" type="button">Watchlist 0</button>
+                        <button class="watchlist" type="button" id="watchlistBtn">Watchlist 0</button>
                     </div>
                 </nav>
                 <div class="hero-copy" id="top">
@@ -1439,6 +1631,13 @@
                     noLiveMatches: when => `No live matches yet · showing reference prices · feed updated ${when}`,
                     feedUnavailable: 'Showing reference prices (live feed unavailable)',
                     refreshIn: s => `Next refresh in ${s}s`,
+                    watchlistLabel: 'Watchlist',
+                    emptyWatchlist: 'Your watchlist is empty. Tap the star on a card to add it.',
+                    buyBtn: 'Buy on Shopee ↗',
+                    trendUp: d => `▲ +${d}%`,
+                    trendDown: d => `▼ -${d}%`,
+                    trendFlat: '· 0%',
+                    trendTooltip: n => `vs last ${n} tracked prices`,
                 },
                 vi: {
                     navCompare: 'So sánh', navHow: 'Cách hoạt động', navAbout: 'Giới thiệu',
@@ -1479,9 +1678,71 @@
                     noLiveMatches: when => `Chưa khớp giá trực tiếp · đang hiện giá tham khảo · feed cập nhật ${when}`,
                     feedUnavailable: 'Đang hiện giá tham khảo (không lấy được feed)',
                     refreshIn: s => `Làm mới sau ${s}s`,
+                    watchlistLabel: 'Yêu thích',
+                    emptyWatchlist: 'Danh sách yêu thích đang trống. Bấm ngôi sao trên card để thêm.',
+                    buyBtn: 'Mua trên Shopee ↗',
+                    trendUp: d => `▲ +${d}%`,
+                    trendDown: d => `▼ -${d}%`,
+                    trendFlat: '· 0%',
+                    trendTooltip: n => `so với ${n} lần cập nhật gần nhất`,
                 }
             };
             let LANG = 'en';
+
+            /* ---------------- watchlist (localStorage) ---------------- */
+            const WATCHLIST_KEY = 'dreamyframex_watchlist';
+            function loadWatchlist() {
+                try {
+                    return new Set(JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]'));
+                } catch (e) {
+                    return new Set();
+                }
+            }
+            function saveWatchlist() {
+                try {
+                    localStorage.setItem(WATCHLIST_KEY, JSON.stringify([...watchlist]));
+                } catch (e) {}
+            }
+            let watchlist = loadWatchlist();
+            let showWatchlistOnly = false;
+            function toggleWatch(id) {
+                if (watchlist.has(id))
+                    watchlist.delete(id);
+                else
+                    watchlist.add(id);
+                saveWatchlist();
+                updateWatchlistUI();
+                render();
+            }
+            function updateWatchlistUI() {
+                const btn = document.querySelector('#watchlistBtn');
+                if (!btn)
+                    return;
+                btn.textContent = `${TXT[LANG].watchlistLabel} ${watchlist.size}`;
+                btn.classList.toggle('active', showWatchlistOnly);
+            }
+
+            /* ---------------- price trend / sparkline ---------------- */
+            function renderTrend(history, t) {
+                if (!history || history.length < 2)
+                    return '';
+                const prices = history.map(h => h.price);
+                const first = prices[0]
+                  , last = prices[prices.length - 1];
+                const pct = first ? Math.round(((last - first) / first) * 100) : 0;
+                const dir = pct < 0 ? 'down' : pct > 0 ? 'up' : 'flat';
+                const label = pct < 0 ? t.trendDown(Math.abs(pct)) : pct > 0 ? t.trendUp(pct) : t.trendFlat;
+                const min = Math.min(...prices)
+                  , max = Math.max(...prices)
+                  , range = max - min || 1;
+                const points = history.map( (h, i) => {
+                    const x = history.length > 1 ? (i / (history.length - 1)) * 40 : 0;
+                    const y = 14 - ((h.price - min) / range) * 12 - 1;
+                    return `${x.toFixed(1)},${y.toFixed(1)}`;
+                }
+                ).join(' ');
+                return `<div class="trend trend-${dir}" title="${t.trendTooltip(history.length)}"><svg class="sparkline" viewBox="0 0 40 14"><polyline points="${points}"/></svg><span>${label}</span></div>`;
+            }
 
             function rebuildOptions(selectEl, options) {
                 if (!selectEl) return;
@@ -1531,6 +1792,7 @@
             function setLanguage(lang) {
                 LANG = lang;
                 applyStaticText();
+                updateWatchlistUI();
                 render();
                 updateCompare();
                 tickRefreshBar();
@@ -1570,6 +1832,8 @@
                             g.discount = rollDiscount(g);
                         if (live.url)
                             g.buyUrl = live.url;
+                        if (live.history)
+                            g.history = live.history;
                         g.live = true;
                         matched++;
                     } else {
@@ -1638,6 +1902,8 @@
                   , vram = Number(document.querySelector('#vram').value) || 0
                   , max = rangePrice(Number(document.querySelector('#priceRange').value));
                 let list = gpus.filter(g => (!query || `${g.name} ${g.vendor} ${g.vram}gb ${recommendedPsu(g.watt)}w`.toLowerCase().includes(query)) && (brand === 'all' || g.vendor === brand) && g.vram >= vram && dealPrice(g) <= max);
+                if (showWatchlistOnly)
+                    list = list.filter(g => watchlist.has(g.id));
                 const mode = document.querySelector('#sort').value
                   , metric = {
                     strength: 'fps',
@@ -1659,7 +1925,8 @@
                 }
                 );
                 document.querySelector('#resultCount').textContent = t.resultCount(list.length, gpus.length);
-                grid.innerHTML = list.length ? list.map( (g, i) => `<article class="gpu" style="animation-delay:${Math.min(i * 22, 300)}ms"><div class="gpu-top"><div><div class="vendor">${g.vendor}${g.live ? ' · ' + t.live : ''}</div><h3>${g.name}</h3><div class="meta"><span>${g.vram} ${t.gbVram}</span><span>${t.psu} ${recommendedPsu(g.watt)}${t.wPlus}</span></div></div><div class="price-stack"><span class="discount-badge">-${g.discount}%</span><span class="original-price">${money(g.price)}</span><div class="price">${money(dealPrice(g))}</div></div></div><div class="stats"><div class="stat"><small>${t.statLoad}</small><strong>${g.temp}°C</strong></div><div class="stat"><small>${t.statFurmark}</small><strong>${g.score.toLocaleString()}</strong></div><div class="stat"><small>${t.statFps}</small><strong>${g.fps} FPS</strong></div></div><div class="gpu-footer"><span class="score">${money(dealPrice(g) / g.fps)} ${t.perFps}</span><button class="add" onclick="toggleSelect(${g.id})">${selected.includes(g.id) ? t.addedBtn : t.addBtn}</button></div></article>`).join('') : `<div class="empty">${t.emptyGrid}</div>`;
+                const emptyMsg = showWatchlistOnly ? t.emptyWatchlist : t.emptyGrid;
+                grid.innerHTML = list.length ? list.map( (g, i) => `<article class="gpu" style="animation-delay:${Math.min(i * 22, 300)}ms"><div class="gpu-top"><div><div class="vendor">${g.vendor}${g.live ? ' · ' + t.live : ''}</div><h3>${g.name}</h3><div class="meta"><span>${g.vram} ${t.gbVram}</span><span>${t.psu} ${recommendedPsu(g.watt)}${t.wPlus}</span></div></div><div class="price-stack"><button class="watch-toggle${watchlist.has(g.id) ? ' active' : ''}" onclick="toggleWatch(${g.id})" title="Watchlist" aria-label="Watchlist">${watchlist.has(g.id) ? '★' : '☆'}</button><span class="discount-badge">-${g.discount}%</span><span class="original-price">${money(g.price)}</span><div class="price">${money(dealPrice(g))}</div>${renderTrend(g.history, t)}</div></div><div class="stats"><div class="stat"><small>${t.statLoad}</small><strong>${g.temp}°C</strong></div><div class="stat"><small>${t.statFurmark}</small><strong>${g.score.toLocaleString()}</strong></div><div class="stat"><small>${t.statFps}</small><strong>${g.fps} FPS</strong></div></div><div class="gpu-footer"><span class="score">${money(dealPrice(g) / g.fps)} ${t.perFps}</span><button class="add" onclick="toggleSelect(${g.id})">${selected.includes(g.id) ? t.addedBtn : t.addBtn}</button></div>${g.live && g.buyUrl ? `<div class="buy-row"><a class="buy-btn" href="${g.buyUrl}" target="_blank" rel="noopener noreferrer">${t.buyBtn}</a></div>` : ''}</article>`).join('') : `<div class="empty">${emptyMsg}</div>`;
             }
             function toggleSelect(id) {
                 if (selected.includes(id))
@@ -1717,6 +1984,12 @@
             }
             );
             document.querySelector('#langBtn').addEventListener('click', () => setLanguage(LANG === 'en' ? 'vi' : 'en'));
+            document.querySelector('#watchlistBtn').addEventListener('click', () => {
+                showWatchlistOnly = !showWatchlistOnly;
+                updateWatchlistUI();
+                render();
+            }
+            );
 
             const filterDock = document.querySelector('#filterDock');
             let lastScroll = window.scrollY;
@@ -1732,6 +2005,7 @@
                 passive: true
             });
             applyStaticText();
+            updateWatchlistUI();
             updateSlider();
             render();
             updateCompare();
