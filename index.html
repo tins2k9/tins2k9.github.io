@@ -212,6 +212,15 @@
                 font-size: 1.3rem;
             }
 
+            .brand-logo {
+                width: 34px;
+                height: 34px;
+                border-radius: 12px;
+                object-fit: cover;
+                box-shadow: 0 0 14px rgba(135,84,232,.45);
+                flex-shrink: 0;
+            }
+
             .mark {
                 width: 34px;
                 height: 34px;
@@ -346,11 +355,58 @@
                 letter-spacing: -.06em;
             }
 
-            .about p {
+            .about-tagline {
+                margin: 8px 0 0;
+                color: var(--muted);
+                font: 500 .76rem 'DM Mono',monospace;
+            }
+
+            .about-content p {
                 max-width: 620px;
-                margin: 0;
+                margin: 0 0 14px;
                 color: var(--muted);
                 line-height: 1.7;
+            }
+
+            .about-disclaimer {
+                font-style: italic;
+                font-size: .82rem;
+            }
+
+            .about-links {
+                display: flex;
+                gap: 12px;
+                margin-top: 4px;
+            }
+
+            .social-btn {
+                display: inline-flex;
+                align-items: center;
+                height: 42px;
+                padding: 0 20px;
+                border-radius: 999px;
+                border: 1px solid rgba(255,255,255,.4);
+                text-decoration: none;
+                font: 600 .72rem 'DM Mono',monospace;
+                text-transform: uppercase;
+                letter-spacing: .04em;
+                box-shadow: 0 6px 18px rgba(115,71,168,.12);
+                transition: transform .2s,box-shadow .2s;
+            }
+
+            .social-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 12px 26px rgba(106,57,166,.24);
+            }
+
+            .social-btn.tiktok {
+                color: #fff;
+                background: linear-gradient(135deg,#161616,#3a3a3a);
+            }
+
+            .social-btn.discord {
+                color: #fff;
+                background: linear-gradient(135deg,#5865f2,#8791ff);
             }
 
             .filter-dock {
@@ -1089,7 +1145,7 @@
             <header>
                 <nav class="site-nav" aria-label="Main navigation">
                     <a class="nav-brand" href="#top">
-                        <span class="mark">✦</span>
+                        <img class="brand-logo" src="logo.png" alt="DreamyFrame X logo">
                         <span>
                             dreamy<br>frame x
                         </span>
@@ -1208,15 +1264,18 @@
             </div>
             <section class="grid" id="grid"></section>
             <section class="about" id="about">
-                <h2 id="aboutHeading">About</h2>
-                <p id="aboutText">
-                    Hi, this is made by Dreamy.<br>
-                    Tiktok : https://www.tiktok.com/@dreamy.setupvn?_r=1&_t=ZS-98IsFR1lAzl<br>
-                    Discord : https://discord.gg/FzV66vCNBG<br>
-                    <br>
-                    DreamyFrame X turns your gpu shoping chaos into a calm, useful shortlist, so finding your next gpu feels a little more magical.<br>
-                    <br>Thông tin có thể không đúng sự thật nhưng theo tôi thì nó đúng khoảng 80% :3
-                </p>
+                <div>
+                    <h2 id="aboutHeading">About</h2>
+                    <p class="about-tagline" id="aboutTagline">Made by Dreamy.</p>
+                </div>
+                <div class="about-content">
+                    <p id="aboutText">DreamyFrame X turns your gpu shopping chaos into a calm, useful shortlist, so finding your next gpu feels a little more magical.</p>
+                    <p class="about-disclaimer" id="aboutDisclaimer">Info might not be 100% accurate, but I'd say it's right about 80% of the time :3</p>
+                    <div class="about-links">
+                        <a class="social-btn tiktok" id="tiktokBtn" href="https://www.tiktok.com/@dreamy.setupvn?_r=1&_t=ZS-98IsFR1lAzl" target="_blank" rel="noopener noreferrer">TikTok ↗</a>
+                        <a class="social-btn discord" id="discordBtn" href="https://discord.gg/FzV66vCNBG" target="_blank" rel="noopener noreferrer">Discord ↗</a>
+                    </div>
+                </div>
             </section>
         </main>
         <aside class="drawer" id="drawer" aria-hidden="true">
@@ -1248,8 +1307,7 @@
             </div>
         </aside>
         <script>
-            const gpus = [['RTX 5090', 'NVIDIA', 32, 100000, 88, 575, 530], ['RTX 5090 D', 'NVIDIA', 32, 95000, 86, 575, 529], ['RTX 4090', 'NVIDIA', 24, 60000, 78, 450, 434], ['RTX 4090 D', 'NVIDIA', 24, 58000, 78, 425, 399], ['RTX 5080', 'NVIDIA', 16, 50000, 76, 360, 379], ['RX 7900 XTX', 'AMD', 24, 30000, 76, 355, 350], ['RTX 4080', 'NVIDIA', 16, 23000, 74, 320, 355], ['RTX 4080 SUPER', 'NVIDIA', 16, 24000, 74, 320, 348], ['RX 9070 XT', 'AMD', 16, 24000, 72, 304, 326], ['RX 7900 XT', 'AMD', 20, 22000, 74, 315, 296], ['RX 7900 GRE', 'AMD', 16, 20000, 72, 260, 265], ['RX 6950 XT', 'AMD', 16, 13700, 78, 335, 282], ['RX 9070 ', 'AMD', 16, 22000, 70, 220, 289], ['RTX 5070 Ti', 'NVIDIA', 16, 32000, 72, 300, 290], ['RTX 5070', 'NVIDIA', 12, 25000, 70, 250, 282], ['RTX 4070 Ti SUPER', 'NVIDIA', 16, 22000, 69, 285, 279], ['RTX 4070 Ti', 'NVIDIA', 12, 22000, 68, 285, 281], ['RX 6900 XT', 'AMD', 16, 13700, 78, 300, 280], ['RX 6800 XT', 'AMD', 16, 10000, 73, 300, 248], ['RTX 3090 Ti', 'NVIDIA', 24, 20000, 83, 450, 248], ['RTX 4070 SUPER', 'NVIDIA', 12, 20000, 66, 220, 227], ['RX 7800 XT', 'AMD', 16, 16000, 69, 263, 207], ['RTX 3080 12GB', 'NVIDIA', 12, 16000, 77, 350, 211], ['RTX 4070', 'NVIDIA', 12, 18000, 64, 200, 204], ['RX 6800', 'AMD', 16, 13000, 72, 250, 190], ['RTX 3090', 'NVIDIA', 24, 18000, 82, 350, 192], ['RX 7700 XT', 'AMD', 12, 15000, 70, 245, 189], ['RX 9060 XT 16gb', 'AMD', 16, 17000, 68, 190, 184], ['RX 9060 XT 8gb', 'AMD', 8, 13000, 67, 190, 182], ['RTX 5060 Ti 16gb', 'NVIDIA', 16, 22000, 67, 180, 192], ['RTX 5060 Ti 8gb', 'NVIDIA', 8, 16000, 67, 180, 189], ['RX 6750 XT', 'AMD', 12, 7500, 76, 250, 163], ['RTX 4060 Ti', 'NVIDIA', 8, 12000, 66, 160, 170], ['RTX 2080 Ti', 'NVIDIA', 11, 7000, 78, 250, 170], ['RTX 3070 Ti', 'NVIDIA', 8, 12000, 75, 290, 177], ['RTX 2080 SUPER', 'NVIDIA', 8, 6700, 75, 250, 159], ['RTX 3070', 'NVIDIA', 8, 10000, 73, 220, 160], ['RTX 5060', 'NVIDIA', 8, 12000, 64, 145, 151], ['RX 7600 XT', 'AMD', 16, 8000, 65, 190, 142], ['RTX 2070 SUPER', 'NVIDIA', 8, 6200, 73, 215, 144], ['RTX 2070 ', 'NVIDIA', 8, 5500, 71, 215, 124], ['RTX 2060 SUPER', 'NVIDIA', 8, 4600, 72, 175, 112], ['RTX 2060 ', 'NVIDIA', 6, 4000, 70, 160, 103], ['RTX 4060', 'NVIDIA', 8, 9000, 63, 115, 120], ['RX 5700 XT', 'AMD', 8, 4000, 75, 225, 129], ['GTX 1080 Ti', 'NVIDIA', 11, 5200, 84, 250, 131], ['RTX 3060 Ti', 'NVIDIA', 8, 7200, 72, 200, 137], ['Arc A770', 'Intel', 16, 10000, 72, 225, 175], ['Arc A750', 'Intel', 8, 7500, 70, 225, 142], ['Arc B580', 'Intel', 12, 9850, 68, 190, 150], ['RX 6600 XT', 'AMD', 8, 5500, 68, 160, 138], ['RTX 3050 (Desktop)', 'NVIDIA', 8, 5500, 70, 130, 72], ['GTX 1660 SUPER', 'NVIDIA', 6, 3600, 73, 125, 76], ['RX 6600', 'AMD', 8, 5500, 66, 132, 108], ['RX 6500 XT', 'AMD', 4, 3000, 72, 107, 82], ['GTX 1060 6GB', 'NVIDIA', 6, 1800, 78, 120, 60], ['GTX 1650', 'NVIDIA', 4, 2700, 67, 75, 51], ['RX 580', 'AMD', 8, 2500, 78, 185, 62], ['Arc A380', 'Intel', 6, 6000, 72, 75, 43], ['GT 730', 'NVIDIA', 2, 1200, 76, 49, 6], ['RTX 3050 (Laptop)', 'NVIDIA', 8, 4000, 73, 75, 60], ['RTX 4050 (Laptop)', 'NVIDIA', 6, 8000, 89, 75, 108], ['RTX 5050 (Laptop) ', 'NVIDIA', 8, 10000, 87, 75, 115], ['RTX 5050 (Desktop) ', 'NVIDIA', 8, 12000, 72, 130, 130], ['RTX 2050 (Laptop) ', 'NVIDIA', 4, 3000, 80, 75, 40], ['RTX 3060', 'NVIDIA', 12, 6800, 74, 200, 109]
-            ].map( (x, i) => ({
+            const gpus = [['RTX PRO 6000 Blackwell Workstation', 'NVIDIA', 96, 100000, 85, 600, 609], ['RTX 5090', 'NVIDIA', 32, 100000, 88, 575, 491], ['RTX 5090 D', 'NVIDIA', 32, 95000, 86, 575, 491], ['RTX 4090', 'NVIDIA', 24, 60000, 78, 450, 412], ['RTX 4090 D', 'NVIDIA', 24, 58000, 78, 425, 389], ['RTX 5080', 'NVIDIA', 16, 50000, 76, 360, 357], ['RX 7900 XTX', 'AMD', 24, 30000, 76, 355, 347], ['RTX 4080', 'NVIDIA', 16, 23000, 74, 320, 346], ['RTX 4080 SUPER', 'NVIDIA', 16, 24000, 74, 320, 336], ['RX 9070 XT', 'AMD', 16, 24000, 72, 304, 334], ['RX 7900 XT', 'AMD', 20, 22000, 74, 315, 297], ['RX 7900 GRE', 'AMD', 16, 20000, 72, 260, 260], ['RX 6950 XT', 'AMD', 16, 13700, 78, 335, 296], ['RX 9070', 'AMD', 16, 28000, 70, 220, 293], ['RTX 5070 Ti', 'NVIDIA', 16, 32000, 72, 300, 280], ['RTX 5070', 'NVIDIA', 12, 25000, 70, 250, 274], ['RTX 4070 Ti SUPER', 'NVIDIA', 16, 22000, 69, 285, 272], ['RTX 4070 Ti', 'NVIDIA', 12, 22000, 68, 285, 272], ['RX 6900 XT', 'AMD', 16, 13700, 78, 300, 270], ['RX 6800 XT', 'AMD', 16, 10000, 73, 300, 257], ['RTX 3090 Ti', 'NVIDIA', 24, 20000, 83, 450, 252], ['RTX 4070 SUPER', 'NVIDIA', 12, 20000, 66, 220, 239], ['RX 7800 XT', 'AMD', 16, 16000, 69, 263, 209], ['RTX 3080 12GB', 'NVIDIA', 12, 16000, 77, 350, 208], ['RTX 4070', 'NVIDIA', 12, 18000, 64, 200, 199], ['RX 6800', 'AMD', 16, 13000, 72, 250, 198], ['RTX 3090', 'NVIDIA', 24, 18000, 82, 350, 191], ['RX 7700 XT', 'AMD', 12, 15000, 70, 245, 189], ['RX 9060 XT', 'AMD', 16, 20000, 68, 190, 187], ['RTX 5060 Ti', 'NVIDIA', 16, 20000, 67, 180, 187], ['RX 6750 XT', 'AMD', 12, 7500, 76, 250, 179], ['RTX 4060 Ti', 'NVIDIA', 8, 12000, 66, 160, 168], ['RTX 2080 Ti', 'NVIDIA', 11, 7000, 78, 250, 169], ['RTX 3070 Ti', 'NVIDIA', 8, 12000, 75, 290, 164], ['RTX 2080 SUPER', 'NVIDIA', 8, 6700, 75, 250, 156], ['RTX 3070', 'NVIDIA', 8, 10000, 73, 220, 151], ['RTX 5060', 'NVIDIA', 8, 12000, 64, 145, 147], ['RX 7600 XT', 'AMD', 16, 8000, 65, 190, 144], ['RTX 2070 SUPER', 'NVIDIA', 8, 5000, 73, 215, 144], ['RTX 4060', 'NVIDIA', 8, 9000, 63, 115, 120], ['RX 5700 XT', 'AMD', 8, 4000, 75, 225, 134], ['GTX 1080 Ti', 'NVIDIA', 11, 5200, 84, 250, 124], ['RTX 3060 Ti', 'NVIDIA', 8, 7200, 72, 200, 127], ['Arc A770', 'Intel', 16, 10000, 72, 225, 165], ['Arc A750', 'Intel', 8, 7500, 70, 225, 142], ['Arc B580', 'Intel', 12, 9850, 68, 190, 139], ['RX 6600 XT', 'AMD', 8, 5500, 68, 160, 138], ['RTX 3050', 'NVIDIA', 8, 5500, 70, 130, 72], ['GTX 1660 SUPER', 'NVIDIA', 6, 3600, 73, 125, 76], ['RX 6600', 'AMD', 8, 5500, 66, 132, 108], ['RX 6500 XT', 'AMD', 4, 3000, 72, 107, 82], ['GTX 1060 6GB', 'NVIDIA', 6, 1800, 78, 120, 59], ['GTX 1650', 'NVIDIA', 4, 2700, 67, 75, 50], ['RX 580', 'AMD', 8, 2500, 78, 185, 62], ['Arc A380', 'Intel', 6, 6000, 72, 75, 43], ['GT 730', 'NVIDIA', 2, 1200, 76, 49, 7], ['RTX 3060', 'NVIDIA', 12, 6800, 74, 200, 115]].map( (x, i) => ({
                 id: i,
                 name: x[0],
                 vendor: x[1],
@@ -1258,10 +1316,9 @@
                 temp: x[4],
                 watt: x[5],
                 fps: x[6],
-                score: x[6] * 60
+                score: x[6] * 82
             }));
-
-            const supplemental = [['GTX 780 Ti', 'NVIDIA', 3, 1700000, 82, 250, 84], ['GTX 780', 'NVIDIA', 3, 1500000, 80, 230, 62], ['GTX 770', 'NVIDIA', 2, 1400000, 79, 230, 54], ['GTX 760', 'NVIDIA', 2, 1250000, 78, 170, 51], ['GTX 750 Ti', 'NVIDIA', 2, 1200000, 72, 60, 33], ['GTX 750', 'NVIDIA', 1, 1200000, 70, 55, 17], ['GTX 980 Ti', 'NVIDIA', 6, 2000000, 82, 250, 84], ['GTX 980', 'NVIDIA', 4, 1900000, 79, 165, 62], ['GTX 970', 'NVIDIA', 4, 1750000, 78, 145, 54], ['GTX 960', 'NVIDIA', 2, 1600000, 76, 120, 35], ['GTX 950', 'NVIDIA', 2, 1300000, 74, 90, 27], ['GTX 1080', 'NVIDIA', 8, 4000000, 79, 180, 102], ['GTX 1070 Ti', 'NVIDIA', 8, 3800000, 78, 180, 85], ['GTX 1070', 'NVIDIA', 8, 3300000, 77, 150, 83], ['GTX 1050 Ti', 'NVIDIA', 4, 1500000, 72, 75, 33], ['GTX 1050', 'NVIDIA', 2, 1500000, 70, 75, 29], ['GTX 1660 Ti', 'NVIDIA', 6, 3800000, 74, 120, 79], ['GTX 1660', 'NVIDIA', 6, 3200000, 73, 120, 76], ['GTX Titan', 'NVIDIA', 6, 2300000, 82, 250, 43], ['R9 280X', 'AMD', 3, 1400000, 82, 250, 34], ['R9 270X', 'AMD', 2, 950000, 79, 180, 27], ['R7 250X', 'AMD', 2, 900000, 74, 80, 18], ['RX Vega 64', 'AMD', 8, 4500000, 85, 295, 97], ['RX Vega 56', 'AMD', 8, 2300000, 83, 210, 89], ['RX 550', 'AMD', 4, 1200000, 74, 50, 30], ['RX 5700', 'AMD', 8, 6000000, 77, 180, 114], ['Radeon VII', 'AMD', 16, 3800000, 81, 300, 110], ['Arc A310', 'Intel', 4, 2500000, 70, 75, 33], ['Arc A580', 'Intel', 8, 6000000, 72, 185, 127]].map( (x, i) => ({
+            const supplemental = [['GTX 780 Ti', 'NVIDIA', 3, 1700000, 82, 250, 42], ['GTX 780', 'NVIDIA', 3, 1500000, 80, 230, 38], ['GTX 770', 'NVIDIA', 2, 1400000, 79, 230, 34], ['GTX 760', 'NVIDIA', 2, 1250000, 78, 170, 29], ['GTX 750 Ti', 'NVIDIA', 2, 1200000, 72, 60, 23], ['GTX 750', 'NVIDIA', 1, 1200000, 70, 55, 18], ['GTX 980 Ti', 'NVIDIA', 6, 2000000, 82, 250, 86], ['GTX 980', 'NVIDIA', 4, 1900000, 79, 165, 65], ['GTX 970', 'NVIDIA', 4, 1750000, 78, 145, 55], ['GTX 960', 'NVIDIA', 2, 1600000, 76, 120, 37], ['GTX 950', 'NVIDIA', 2, 1300000, 74, 90, 28], ['GTX 1080', 'NVIDIA', 8, 4000000, 79, 180, 98], ['GTX 1070 Ti', 'NVIDIA', 8, 3800000, 78, 180, 83], ['GTX 1070', 'NVIDIA', 8, 3300000, 77, 150, 81], ['GTX 1050 Ti', 'NVIDIA', 4, 1500000, 72, 75, 35], ['GTX 1050', 'NVIDIA', 2, 1500000, 70, 75, 31], ['GTX 1660 Ti', 'NVIDIA', 6, 3800000, 74, 120, 77], ['GTX 1660', 'NVIDIA', 6, 3200000, 73, 120, 72], ['GTX Titan', 'NVIDIA', 6, 2300000, 82, 250, 43], ['R9 280X', 'AMD', 3, 1400000, 82, 250, 34], ['R9 270X', 'AMD', 2, 950000, 79, 180, 27], ['R7 250X', 'AMD', 2, 900000, 74, 80, 18], ['RX Vega 64', 'AMD', 8, 4500000, 85, 295, 94], ['RX Vega 56', 'AMD', 8, 2300000, 83, 210, 89], ['RX 550', 'AMD', 4, 1200000, 74, 50, 30], ['RX 5700', 'AMD', 8, 6000000, 77, 180, 116], ['Radeon VII', 'AMD', 16, 3800000, 81, 300, 110], ['Arc A310', 'Intel', 4, 2500000, 70, 75, 32], ['Arc A580', 'Intel', 8, 6000000, 72, 185, 126]].map( (x, i) => ({
                 id: gpus.length + i,
                 name: x[0],
                 vendor: x[1],
@@ -1270,9 +1327,8 @@
                 temp: x[4],
                 watt: x[5],
                 fps: x[6],
-                score: x[6] * 60
+                score: x[6] * 82
             }));
-
             gpus.push(...supplemental);
             gpus.push({
                 id: gpus.length,
@@ -1283,7 +1339,7 @@
                 temp: 76,
                 watt: 230,
                 fps: 168,
-                score: 10146
+                score: 13776
             });
             gpus.push({
                 id: gpus.length,
@@ -1294,9 +1350,8 @@
                 temp: 76,
                 watt: 150,
                 fps: 104,
-                score: 6261
+                score: 8533
             });
-
             for (let index = gpus.length - 1; index >= 0; index--) {
                 if (gpus[index].name === 'RX 5700' || gpus[index].name === 'RX 9070')
                     gpus.splice(index, 1);
@@ -1355,7 +1410,11 @@
                     catalogHeading: 'Best deals, sorted.',
                     compareTriggerLabel: 'Compare GPU',
                     aboutHeading: 'About',
-                    aboutText: 'Hi, this is made by Dreamy.<br>Tiktok : https://www.tiktok.com/@dreamy.setupvn?_r=1&_t=ZS-98IsFR1lAzl<br>Discord : https://discord.gg/FzV66vCNBG<br><br>DreamyFrame X turns your gpu shopping chaos into a calm, useful shortlist, so finding your next gpu feels a little more magical.<br><br>Info might not be 100% accurate, but I\'d say it\'s right about 80% of the time :3',
+                    aboutTagline: 'Made by Dreamy.',
+                    aboutText: 'DreamyFrame X turns your gpu shopping chaos into a calm, useful shortlist, so finding your next gpu feels a little more magical.',
+                    aboutDisclaimer: 'Info might not be 100% accurate, but I\'d say it\'s right about 80% of the time :3',
+                    tiktokBtn: 'TikTok ↗',
+                    discordBtn: 'Discord ↗',
                     searchPlaceholder: 'Search name, series, VRAM, PSU...',
                     vendorAll: 'All brands',
                     sortOptions: [{v:'strength',t:'Strongest first'},{v:'weakness',t:'Weakest first'},{v:'coolest',t:'Coolest first'},{v:'hottest',t:'Hottest first'},{v:'psuHigh',t:'Highest PSU'},{v:'psuLow',t:'Lowest PSU'},{v:'cheap',t:'Cheapest first'},{v:'costly',t:'Costliest first'},{v:'value',t:'Best price / performance'},{v:'badValue',t:'Worst price / performance'}],
@@ -1391,7 +1450,11 @@
                     catalogHeading: 'Deal ngon, đã sắp xếp.',
                     compareTriggerLabel: 'So sánh GPU',
                     aboutHeading: 'Giới thiệu',
-                    aboutText: 'Chào, trang này do Dreamy làm.<br>Tiktok : https://www.tiktok.com/@dreamy.setupvn?_r=1&_t=ZS-98IsFR1lAzl<br>Discord : https://discord.gg/FzV66vCNBG<br><br>DreamyFrame X giúp việc chọn mua GPU bớt rối hơn, gom lại thành một danh sách gọn gàng, dễ nhìn.<br><br>Thông tin có thể không đúng sự thật nhưng theo tôi thì nó đúng khoảng 80% :3',
+                    aboutTagline: 'Được làm bởi Dreamy.',
+                    aboutText: 'DreamyFrame X giúp việc chọn mua GPU bớt rối hơn, gom lại thành một danh sách gọn gàng, dễ nhìn.',
+                    aboutDisclaimer: 'Thông tin có thể không đúng sự thật nhưng theo tôi thì nó đúng khoảng 80% :3',
+                    tiktokBtn: 'TikTok ↗',
+                    discordBtn: 'Discord ↗',
                     searchPlaceholder: 'Tìm tên, dòng, VRAM, PSU...',
                     vendorAll: 'Tất cả hãng',
                     sortOptions: [{v:'strength',t:'Mạnh nhất trước'},{v:'weakness',t:'Yếu nhất trước'},{v:'coolest',t:'Mát nhất trước'},{v:'hottest',t:'Nóng nhất trước'},{v:'psuHigh',t:'PSU cao nhất'},{v:'psuLow',t:'PSU thấp nhất'},{v:'cheap',t:'Rẻ nhất trước'},{v:'costly',t:'Đắt nhất trước'},{v:'value',t:'Hiệu năng/giá tốt nhất'},{v:'badValue',t:'Hiệu năng/giá kém nhất'}],
@@ -1446,7 +1509,11 @@
                 document.querySelector('#catalogHeading').textContent = t.catalogHeading;
                 document.querySelector('#compareTriggerLabel').textContent = t.compareTriggerLabel;
                 document.querySelector('#aboutHeading').textContent = t.aboutHeading;
-                document.querySelector('#aboutText').innerHTML = t.aboutText;
+                document.querySelector('#aboutTagline').textContent = t.aboutTagline;
+                document.querySelector('#aboutText').textContent = t.aboutText;
+                document.querySelector('#aboutDisclaimer').textContent = t.aboutDisclaimer;
+                document.querySelector('#tiktokBtn').textContent = t.tiktokBtn;
+                document.querySelector('#discordBtn').textContent = t.discordBtn;
                 document.querySelector('#search').placeholder = t.searchPlaceholder;
                 const vendorAllOpt = document.querySelector('#vendor option[value="all"]');
                 if (vendorAllOpt)
