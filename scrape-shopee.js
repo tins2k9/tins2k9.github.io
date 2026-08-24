@@ -116,7 +116,19 @@ function pickBestListing(json, modelName) {
   return best;
 }
 
+const HISTORY_LIMIT = 14; // keep last 14 tracked price points per model
+
+function loadExistingFeed() {
+  try {
+    return JSON.parse(fs.readFileSync(OUTPUT_PATH, "utf8"));
+  } catch {
+    return null; // first run, or file got corrupted/deleted — start fresh
+  }
+}
+
 async function main() {
+  const existing = loadExistingFeed();
+  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
   const prices = {};
   let matched = 0;
 
@@ -124,9 +136,26 @@ async function main() {
     const json = await shopeeSearch(model);
     const listing = json && pickBestListing(json, model);
     if (listing) {
-      prices[model] = listing;
+      const prevHistory =
+        (existing && existing.prices && existing.prices[model] && existing.prices[model].history) || [];
+      let history = prevHistory.slice();
+      // one point per day: replace today's if we already ran once today,
+      // otherwise append a new point.
+      if (history.length && history[history.length - 1].date === today) {
+        history[history.length - 1] = { date: today, price: listing.price };
+      } else {
+        history.push({ date: today, price: listing.price });
+      }
+      if (history.length > HISTORY_LIMIT) history = history.slice(history.length - HISTORY_LIMIT);
+
+      prices[model] = { ...listing, history };
       matched++;
-      console.log(`✓ ${model} -> ${listing.price.toLocaleString("vi-VN")}₫`);
+      console.log(`✓ ${model} -> ${listing.price.toLocaleString("vi-VN")}₫ (history: ${history.length}pt)`);
+    } else if (existing && existing.prices && existing.prices[model]) {
+      // Blocked/no match this run — keep yesterday's data (with its history)
+      // rather than dropping the model from the feed entirely.
+      prices[model] = existing.prices[model];
+      console.log(`✗ ${model} -> no match / blocked (kept previous data)`);
     } else {
       console.log(`✗ ${model} -> no match / blocked`);
     }
@@ -146,6 +175,7 @@ async function main() {
 }
 
 main();
+
 
 /**
  * ------------------------------------------------------------
