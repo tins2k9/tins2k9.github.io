@@ -1,8 +1,18 @@
 {
-  "updatedAt": "2026-11-16T10:14:45.326Z",
-  "matched": 0,
+  "updatedAt": "2026-11-16T21:19:25.996Z",
+  "matched": 1,
   "total": 31,
   "prices": {
+    "RTX 5090": {
+      "price": 30000000,
+      "url": "https://shopee.vn/product/1756071298/49006868287",
+      "history": [
+        {
+          "date": "2026-11-16",
+          "price": 30000000
+        }
+      ]
+    },
     "RTX 4090": {
       "price": 145000000,
       "url": "https://shopee.vn/product/1155397997/25290947990",
